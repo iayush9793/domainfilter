@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domain Filter - Gmail Verification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+
+        [v-cloak] { display: none; }
+        
+        .step-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .loader {
+            border-top-color: #4f46e5;
+            animation: spinner 0.6s linear infinite;
+        }
+
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+
+    <div class="max-w-4xl mx-auto px-4 py-8 md:py-12">
+        
+        <!-- Navbar -->
+        <header class="flex items-center justify-between mb-8 pb-6 border-b border-slate-200 dark:border-slate-800">
+            <div class="flex items-center gap-4">
+                <div class="bg-indigo-600 p-2.5 rounded-xl shadow-lg shadow-indigo-500/20">
+                    <i data-lucide="filter" class="text-white w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-extrabold tracking-tight">DOMAIN FILTER</h1>
+                    <p class="text-xs font-bold text-slate-400 tracking-widest uppercase">Gmail Verification Engine</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="toggleDarkMode()" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition-all">
+                    <i data-lucide="moon" id="dark-icon" class="w-5 h-5 text-slate-500"></i>
+                </button>
+                <button onclick="toggleSettings()" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition-all">
+                    <i data-lucide="settings" id="settings-icon" class="w-5 h-5 text-slate-500"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Settings Modal -->
+        <div id="settings-panel" class="hidden bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl mb-8 animate-in slide-in-from-top-4">
+            <h2 class="text-sm font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-4 h-4 text-indigo-600"></i> API Configuration
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Client ID</label>
+                    <input type="text" id="input-client-id" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/20">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">API Key</label>
+                    <input type="password" id="input-api-key" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/20">
+                </div>
+            </div>
+            <button onclick="saveSettings()" class="mt-4 w-full bg-slate-900 dark:bg-white dark:text-slate-900 text-white py-2 rounded-lg font-bold text-sm hover:opacity-90">
+                Apply & Save
+            </button>
+        </div>
+
+        <!-- Alert Container -->
+        <div id="alert-container" class="hidden mb-6">
+            <div class="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 p-4 rounded-xl flex items-start gap-3 text-red-700 dark:text-red-400">
+                <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 mt-0.5"></i>
+                <div class="text-sm">
+                    <p class="font-bold">System Alert</p>
+                    <p id="alert-message"></p>
+                    <button onclick="hideAlert()" class="mt-2 text-xs font-black uppercase tracking-tighter hover:underline">Dismiss</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <main class="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <div class="p-8">
+                
+                <!-- STEP 1: UPLOAD -->
+                <div id="step-1" class="py-12 text-center">
+                    <div class="inline-flex items-center justify-center w-24 h-24 bg-indigo-50 dark:bg-indigo-900/20 rounded-3xl mb-8">
+                        <i data-lucide="upload" class="w-10 h-10 text-indigo-600"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2">Import Your Domains</h2>
+                    <p class="text-slate-500 mb-10 text-sm max-w-sm mx-auto">Upload an Excel (.xlsx) or CSV file. We'll automatically find the domain column.</p>
+                    
+                    <label class="cursor-pointer block max-w-md mx-auto">
+                        <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-indigo-500 rounded-2xl p-12 transition-all group bg-slate-50/50 dark:bg-slate-800/20">
+                            <p class="text-indigo-600 font-bold group-hover:scale-105 transition-transform">Browse Local Files</p>
+                            <p class="text-xs text-slate-400 mt-2">Support for .xlsx, .xls, and .csv</p>
+                        </div>
+                        <input type="file" id="file-input" class="hidden" accept=".csv, .xlsx, .xls">
+                    </label>
+                </div>
+
+                <!-- STEP 2: CONFIG & RUN -->
+                <div id="step-2" class="hidden space-y-10">
+                    <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white dark:bg-slate-700 p-2.5 rounded-xl shadow-sm">
+                                <i data-lucide="file-text" class="text-indigo-600 w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 id="display-filename" class="font-bold truncate max-w-[200px]">filename.csv</h3>
+                                <p id="display-count" class="text-xs text-slate-500">0 records found</p>
+                            </div>
+                        </div>
+                        <button onclick="resetApp()" class="text-xs font-black text-red-500 bg-red-50 dark:bg-red-950/30 px-3 py-1.5 rounded-lg hover:bg-red-100 uppercase">Change</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-4">
+                            <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i data-lucide="calendar" class="w-3 h-3"></i> Date Filter
+                            </h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[10px] text-slate-400 mb-1">From</label>
+                                    <input type="date" id="date-start" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-slate-400 mb-1">To</label>
+                                    <input type="date" id="date-end" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <i data-lucide="mail" class="w-3 h-3"></i> Gmail Authorization
+                            </h4>
+                            <div id="auth-status-unconnected">
+                                <button onclick="handleAuth()" class="w-full py-4 bg-slate-900 dark:bg-white dark:text-slate-900 text-white rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg transition-all">
+                                    <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="G">
+                                    Authorize Account
+                                </button>
+                            </div>
+                            <div id="auth-status-connected" class="hidden flex items-center gap-4 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800/50 p-4 rounded-xl">
+                                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-green-500/50"></div>
+                                <div class="flex-1 overflow-hidden">
+                                    <p class="text-[10px] font-black text-green-700 dark:text-green-400 uppercase">Connected</p>
+                                    <p id="connected-email" class="text-sm font-bold text-green-800 dark:text-green-300 truncate">user@gmail.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="run-container">
+                        <button id="btn-run" onclick="startFiltration()" class="w-full py-5 bg-indigo-600 disabled:bg-slate-200 text-white font-black rounded-2xl shadow-xl shadow-indigo-500/20 hover:bg-indigo-700 transition-all flex items-center justify-center gap-4 transform active:scale-[0.98]">
+                            <i data-lucide="play" class="w-5 h-5"></i>
+                            RUN FILTRATION ENGINE
+                        </button>
+                    </div>
+
+                    <div id="progress-container" class="hidden space-y-6">
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <p class="text-xs font-black text-slate-400 uppercase tracking-widest">Processing</p>
+                                <h5 class="text-lg font-bold">Verifying Records...</h5>
+                            </div>
+                            <span id="progress-text" class="text-2xl font-black text-indigo-600">0%</span>
+                        </div>
+                        <div class="w-full h-4 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div id="progress-bar" class="h-full bg-indigo-600 transition-all duration-300 shadow-indigo-500/40" style="width: 0%"></div>
+                        </div>
+                        <div id="log-terminal" class="bg-slate-900 p-5 rounded-2xl font-mono text-[11px] h-40 overflow-y-auto space-y-1.5 border border-slate-800 custom-scrollbar text-slate-300">
+                            <div class="text-indigo-400">Initializing filter sequence...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: RESULTS -->
+                <div id="step-3" class="hidden text-center py-10 space-y-8 animate-in zoom-in-95">
+                    <div class="relative inline-block">
+                        <div class="w-24 h-24 bg-green-100 dark:bg-green-950/30 rounded-full flex items-center justify-center mx-auto">
+                            <i data-lucide="check-circle-2" class="w-12 h-12 text-green-600"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-3xl font-black">Filtration Complete</h2>
+                        <p id="result-summary" class="text-slate-500 mt-3 max-w-sm mx-auto leading-relaxed">
+                            We identified 0 domains that had no activity.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 flex items-center justify-between max-w-lg mx-auto">
+                        <div class="text-left">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Clean</p>
+                            <p id="final-count" class="text-3xl font-black">0</p>
+                        </div>
+                        <button onclick="downloadCSV()" class="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 shadow-xl hover:bg-indigo-700 transition-all">
+                            <i data-lucide="download" class="w-5 h-5"></i> DOWNLOAD CSV
+                        </button>
+                    </div>
+
+                    <button onclick="resetApp()" class="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600 transition-colors">
+                        Start new session
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="mt-12 text-center text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] space-y-2">
+            <p>© 2024 Domain Verification Logic</p>
+            <div class="flex justify-center gap-4">
+                <span>Direct API Connection</span>
+                <span>•</span>
+                <span>No Data Tracking</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+
+    <script>
+        // --- State ---
+        let config = {
+            clientId: '649490790404-ksu6mbsr7iq24c615gt2imafm8clprrb.apps.googleusercontent.com',
+            apiKey: 'AIzaSyDDLtAH-58Gpz1Q8Z7Q1tqGIcMdgPAGVpA'
+        };
+        
+        let tokenClient;
+        let gapiInited = false;
+        let gisInited = false;
+        let fileData = [];
+        let cleanResults = [];
+        let isAuth = false;
+
+        // --- Init UI ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            
+            // Set default dates
+            const end = new Date();
+            const start = new Date();
+            start.setDate(end.getDate() - 30);
+            document.getElementById('date-start').value = start.toISOString().split('T')[0];
+            document.getElementById('date-end').value = end.toISOString().split('T')[0];
+
+            // Setup listeners
+            document.getElementById('file-input').addEventListener('change', handleFileSelect);
+            
+            // Populate settings
+            document.getElementById('input-client-id').value = config.clientId;
+            document.getElementById('input-api-key').value = config.apiKey;
+        });
+
+        // --- Google API Handlers ---
+        function gapiLoaded() {
+            gapi.load('client', initializeGapiClient);
+        }
+
+        async function initializeGapiClient() {
+            try {
+                await gapi.client.init({
+                    apiKey: config.apiKey,
+                    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest'],
+                });
+                gapiInited = true;
+                maybeEnableButtons();
+            } catch (e) {
+                showAlert("GAPI Client failed to load. Check API Key restrictions.");
+            }
+        }
+
+        function gisLoaded() {
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: config.clientId,
+                scope: 'https://www.googleapis.com/auth/gmail.readonly',
+                callback: (resp) => {
+                    if (resp.error) {
+                        showAlert(`Auth Error: ${resp.error}`);
+                        return;
+                    }
+                    isAuth = true;
+                    updateAuthUI();
+                }
+            });
+            gisInited = true;
+            maybeEnableButtons();
+        }
+
+        function maybeEnableButtons() {
+            // Logic to enable buttons once both libs are ready
+        }
+
+        function handleAuth() {
+            tokenClient.requestAccessToken({prompt: 'consent'});
+        }
+
+        async function updateAuthUI() {
+            document.getElementById('auth-status-unconnected').classList.add('hidden');
+            document.getElementById('auth-status-connected').classList.remove('hidden');
+            
+            // Get user email
+            try {
+                const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    headers: { Authorization: `Bearer ${gapi.client.getToken().access_token}` }
+                });
+                const data = await response.json();
+                document.getElementById('connected-email').textContent = data.email;
+            } catch (e) {
+                document.getElementById('connected-email').textContent = "Account Connected";
+            }
+        }
+
+        // --- Logic Handlers ---
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('display-filename').textContent = file.name;
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const data = e.target.result;
+                const workbook = XLSX.read(data, { type: 'binary' });
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                const json = XLSX.utils.sheet_to_json(sheet);
+                
+                fileData = json.map(row => {
+                    let domain = '';
+                    let expiry = '';
+                    Object.keys(row).forEach(key => {
+                        const k = key.toLowerCase();
+                        if (k.includes('domain')) domain = row[key];
+                        if (k.includes('expiry') || k.includes('date')) expiry = row[key];
+                    });
+                    return { domain, expiry };
+                }).filter(item => item.domain);
+
+                if (fileData.length === 0) {
+                    showAlert("No domains found. Please ensure the file has a 'Domain' column.");
+                    return;
+                }
+
+                document.getElementById('display-count').textContent = `${fileData.length} domains detected`;
+                switchStep(2);
+            };
+            reader.readAsBinaryString(file);
+        }
+
+        async function startFiltration() {
+            if (!isAuth) {
+                handleAuth();
+                return;
+            }
+
+            document.getElementById('run-container').classList.add('hidden');
+            document.getElementById('progress-container').classList.remove('hidden');
+            
+            cleanResults = [];
+            const start = document.getElementById('date-start').value.replace(/-/g, '/');
+            const end = document.getElementById('date-end').value.replace(/-/g, '/');
+            const logPanel = document.getElementById('log-terminal');
+            logPanel.innerHTML = '';
+
+            for (let i = 0; i < fileData.length; i++) {
+                const item = fileData[i];
+                const query = `${item.domain} after:${start} before:${end}`;
+                
+                try {
+                    const response = await gapi.client.gmail.users.messages.list({
+                        'userId': 'me',
+                        'q': query,
+                        'maxResults': 1
+                    });
+                    
+                    const hasMail = response.result.resultSizeEstimate > 0;
+                    
+                    if (!hasMail) {
+                        cleanResults.push(item);
+                        addLog(`✓ CLEAN: ${item.domain}`, 'text-green-400');
+                    } else {
+                        addLog(`× FILTERED: ${item.domain}`, 'text-slate-500');
+                    }
+                } catch (err) {
+                    addLog(`! ERROR: ${item.domain}`, 'text-red-400');
+                }
+
+                const progress = Math.round(((i + 1) / fileData.length) * 100);
+                document.getElementById('progress-bar').style.width = `${progress}%`;
+                document.getElementById('progress-text').textContent = `${progress}%`;
+                
+                // Rate limit buffer
+                await new Promise(r => setTimeout(r, 120));
+            }
+
+            // Finish
+            document.getElementById('result-summary').textContent = `Success! We identified ${cleanResults.length} domains that had no email activity in the selected range.`;
+            document.getElementById('final-count').textContent = cleanResults.length;
+            switchStep(3);
+        }
+
+        function addLog(msg, colorClass) {
+            const div = document.createElement('div');
+            div.className = colorClass;
+            div.innerHTML = `<span class="opacity-30 mr-2">[${new Date().toLocaleTimeString()}]</span> ${msg}`;
+            const panel = document.getElementById('log-terminal');
+            panel.prepend(div);
+        }
+
+        function downloadCSV() {
+            const ws = XLSX.utils.json_to_sheet(cleanResults);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "CleanDomains");
+            XLSX.writeFile(wb, `Clean_Domains_${Date.now()}.csv`);
+        }
+
+        // --- Utility ---
+        function switchStep(num) {
+            [1, 2, 3].forEach(n => {
+                document.getElementById(`step-${n}`).classList.add('hidden');
+            });
+            document.getElementById(`step-${num}`).classList.remove('hidden');
+        }
+
+        function resetApp() {
+            fileData = [];
+            document.getElementById('file-input').value = '';
+            document.getElementById('run-container').classList.remove('hidden');
+            document.getElementById('progress-container').classList.add('hidden');
+            switchStep(1);
+        }
+
+        function toggleSettings() {
+            const panel = document.getElementById('settings-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        function saveSettings() {
+            config.clientId = document.getElementById('input-client-id').value;
+            config.apiKey = document.getElementById('input-api-key').value;
+            toggleSettings();
+            showAlert("Settings updated. Initializing again...", "bg-indigo-50", "text-indigo-700");
+            gapiLoaded();
+            gisLoaded();
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('dark-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.setAttribute('data-lucide', 'moon');
+            } else {
+                html.classList.add('dark');
+                icon.setAttribute('data-lucide', 'sun');
+            }
+            lucide.createIcons();
+        }
+
+        function showAlert(msg) {
+            const container = document.getElementById('alert-container');
+            const msgEl = document.getElementById('alert-message');
+            msgEl.textContent = msg;
+            container.classList.remove('hidden');
+        }
+
+        function hideAlert() {
+            document.getElementById('alert-container').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
