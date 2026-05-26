@@ -1,488 +1,1181 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Domain Filter - Gmail Verification</title>
+    <title>DomainDiscovery AI PRO - Beast Mode 100%</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font Awesome Icons for backup -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
         
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
-
-        [v-cloak] { display: none; }
         
-        .step-transition {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        input[type="range"]::-webkit-slider-thumb { 
+            border-radius: 50%; 
+            height: 18px; 
+            width: 18px; 
+            background: #4f46e5; 
+            cursor: pointer; 
+            -webkit-appearance: none; 
+            margin-top: -8px; 
         }
-
-        .loader {
-            border-top-color: #4f46e5;
-            animation: spinner 0.6s linear infinite;
+        input[type="range"]::-webkit-slider-runnable-track { 
+            width: 100%; 
+            height: 4px; 
+            cursor: pointer; 
+            background: #e2e8f0; 
+            border-radius: 2px; 
         }
-
-        @keyframes spinner {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        
+        /* Beast Mode Dynamic Glow Animation */
+        .beast-glow {
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
+            animation: pulse-beast 2s infinite;
+        }
+        @keyframes pulse-beast {
+            0% { box-shadow: 0 0 5px rgba(79, 70, 229, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(79, 70, 229, 0.7); }
+            100% { box-shadow: 0 0 5px rgba(79, 70, 229, 0.4); }
         }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
-
-    <div class="max-w-4xl mx-auto px-4 py-8 md:py-12">
+<body class="bg-slate-50 text-slate-900 min-h-screen p-4 md:p-8">
+    
+    <div class="max-w-6xl mx-auto space-y-8">
         
-        <!-- Navbar -->
-        <header class="flex items-center justify-between mb-8 pb-6 border-b border-slate-200 dark:border-slate-800">
-            <div class="flex items-center gap-4">
-                <div class="bg-indigo-600 p-2.5 rounded-xl shadow-lg shadow-indigo-500/20">
-                    <i data-lucide="filter" class="text-white w-6 h-6"></i>
-                </div>
-                <div>
-                    <h1 class="text-2xl font-extrabold tracking-tight">DOMAIN FILTER</h1>
-                    <p class="text-xs font-bold text-slate-400 tracking-widest uppercase">Gmail Verification Engine</p>
-                </div>
+        <!-- HEADER -->
+        <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-6 border-slate-200">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight text-indigo-600 flex items-center gap-2">
+                    <i data-lucide="zap" class="w-8 h-8 fill-current"></i>
+                    DomainDiscovery <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full ml-2">BEAST MODE 100%</span>
+                </h1>
+                <p class="text-slate-500 mt-1 font-medium text-sm">AI Expansion & Automated Bulk Purchase — User: ashwinaray</p>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="toggleDarkMode()" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition-all">
-                    <i data-lucide="moon" id="dark-icon" class="w-5 h-5 text-slate-500"></i>
+            <div class="flex items-center gap-3">
+                <!-- Mode Status Badge Indicator -->
+                <span id="modeBadge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold"></span>
+                
+                <!-- IP Whitelist status shortcut -->
+                <button onclick="openSettingsModal()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl text-xs font-semibold text-slate-600 transition-all flex items-center gap-1.5">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i> Config & IP
                 </button>
-                <button onclick="toggleSettings()" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition-all">
-                    <i data-lucide="settings" id="settings-icon" class="w-5 h-5 text-slate-500"></i>
-                </button>
+                <div class="px-4 py-2 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center gap-3">
+                    <div class="text-right">
+                        <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Account ID</p>
+                        <p class="text-xs font-semibold text-slate-700">ashwinaray</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 border border-indigo-100">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                    </div>
+                </div>
             </div>
         </header>
 
-        <!-- Settings Modal -->
-        <div id="settings-panel" class="hidden bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl mb-8 animate-in slide-in-from-top-4">
-            <h2 class="text-sm font-bold mb-4 flex items-center gap-2">
-                <i data-lucide="shield-check" class="w-4 h-4 text-indigo-600"></i> API Configuration
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Client ID</label>
-                    <input type="text" id="input-client-id" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/20">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">API Key</label>
-                    <input type="password" id="input-api-key" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/20">
-                </div>
-            </div>
-            <button onclick="saveSettings()" class="mt-4 w-full bg-slate-900 dark:bg-white dark:text-slate-900 text-white py-2 rounded-lg font-bold text-sm hover:opacity-90">
-                Apply & Save
-            </button>
-        </div>
-
-        <!-- Alert Container -->
-        <div id="alert-container" class="hidden mb-6">
-            <div class="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 p-4 rounded-xl flex items-start gap-3 text-red-700 dark:text-red-400">
-                <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 mt-0.5"></i>
-                <div class="text-sm">
-                    <p class="font-bold">System Alert</p>
-                    <p id="alert-message"></p>
-                    <button onclick="hideAlert()" class="mt-2 text-xs font-black uppercase tracking-tighter hover:underline">Dismiss</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Card -->
-        <main class="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-            <div class="p-8">
+        <!-- MAIN LAYOUT -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- SIDEBAR: Controls & Settings -->
+            <aside class="lg:col-span-4 space-y-6">
                 
-                <!-- STEP 1: UPLOAD -->
-                <div id="step-1" class="py-12 text-center">
-                    <div class="inline-flex items-center justify-center w-24 h-24 bg-indigo-50 dark:bg-indigo-900/20 rounded-3xl mb-8">
-                        <i data-lucide="upload" class="w-10 h-10 text-indigo-600"></i>
+                <!-- Input Concept Section -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 font-semibold text-slate-700 text-sm">
+                            <i data-lucide="brain-circuit" class="w-4 h-4 text-indigo-600"></i>
+                            <span>Concept / Seed Phrase</span>
+                        </div>
                     </div>
-                    <h2 class="text-2xl font-bold mb-2">Import Your Domains</h2>
-                    <p class="text-slate-500 mb-10 text-sm max-w-sm mx-auto">Upload an Excel (.xlsx) or CSV file. We'll automatically find the domain column.</p>
                     
-                    <label class="cursor-pointer block max-w-md mx-auto">
-                        <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-indigo-500 rounded-2xl p-12 transition-all group bg-slate-50/50 dark:bg-slate-800/20">
-                            <p class="text-indigo-600 font-bold group-hover:scale-105 transition-transform">Browse Local Files</p>
-                            <p class="text-xs text-slate-400 mt-2">Support for .xlsx, .xls, and .csv</p>
-                        </div>
-                        <input type="file" id="file-input" class="hidden" accept=".csv, .xlsx, .xls">
-                    </label>
-                </div>
-
-                <!-- STEP 2: CONFIG & RUN -->
-                <div id="step-2" class="hidden space-y-10">
-                    <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
-                        <div class="flex items-center gap-4">
-                            <div class="bg-white dark:bg-slate-700 p-2.5 rounded-xl shadow-sm">
-                                <i data-lucide="file-text" class="text-indigo-600 w-6 h-6"></i>
-                            </div>
-                            <div>
-                                <h3 id="display-filename" class="font-bold truncate max-w-[200px]">filename.csv</h3>
-                                <p id="display-count" class="text-xs text-slate-500">0 records found</p>
-                            </div>
-                        </div>
-                        <button onclick="resetApp()" class="text-xs font-black text-red-500 bg-red-50 dark:bg-red-950/30 px-3 py-1.5 rounded-lg hover:bg-red-100 uppercase">Change</button>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="space-y-4">
-                            <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                <i data-lucide="calendar" class="w-3 h-3"></i> Date Filter
-                            </h4>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-[10px] text-slate-400 mb-1">From</label>
-                                    <input type="date" id="date-start" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm outline-none">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] text-slate-400 mb-1">To</label>
-                                    <input type="date" id="date-end" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm outline-none">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="space-y-4">
-                            <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                <i data-lucide="mail" class="w-3 h-3"></i> Gmail Authorization
-                            </h4>
-                            <div id="auth-status-unconnected">
-                                <button onclick="handleAuth()" class="w-full py-4 bg-slate-900 dark:bg-white dark:text-slate-900 text-white rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg transition-all">
-                                    <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="G">
-                                    Authorize Account
-                                </button>
-                            </div>
-                            <div id="auth-status-connected" class="hidden flex items-center gap-4 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800/50 p-4 rounded-xl">
-                                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-green-500/50"></div>
-                                <div class="flex-1 overflow-hidden">
-                                    <p class="text-[10px] font-black text-green-700 dark:text-green-400 uppercase">Connected</p>
-                                    <p id="connected-email" class="text-sm font-bold text-green-800 dark:text-green-300 truncate">user@gmail.com</p>
-                                </div>
-                            </div>
+                    <div class="space-y-3">
+                        <p class="text-[11px] text-slate-500">Enter a concept. AI expansion will generate high-value variations, double-checking for 100% availability.</p>
+                        <div class="relative flex items-center">
+                            <input type="text" id="keywordInput" placeholder="e.g. communication marketing"
+                                class="w-full pl-3 pr-28 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-sm font-medium">
+                            <button onclick="autoGenerateKeywords()" 
+                                class="absolute right-1.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold text-[10px] py-1.5 px-2.5 rounded-md transition-all flex items-center gap-1">
+                                <i data-lucide="sparkles" class="w-3 h-3"></i> AUTO GEN
+                            </button>
                         </div>
                     </div>
 
-                    <div id="run-container">
-                        <button id="btn-run" onclick="startFiltration()" class="w-full py-5 bg-indigo-600 disabled:bg-slate-200 text-white font-black rounded-2xl shadow-xl shadow-indigo-500/20 hover:bg-indigo-700 transition-all flex items-center justify-center gap-4 transform active:scale-[0.98]">
-                            <i data-lucide="play" class="w-5 h-5"></i>
-                            RUN FILTRATION ENGINE
-                        </button>
+                    <!-- Category Niche Selector -->
+                    <div class="space-y-1.5">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Niche Segment Focus</label>
+                        <select id="nicheSelect" class="w-full bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-indigo-500 text-slate-700 py-2 px-3 rounded-lg text-xs font-semibold outline-none cursor-pointer">
+                            <option value="mixed">🌐 Mixed Industry Blend</option>
+                            <option value="production">⚙️ Production & SaaS</option>
+                            <option value="marketing">📈 Lead Marketing</option>
+                            <option value="email">✉️ Email & Delivery</option>
+                            <option value="mortgage">🏠 Mortgage & Loan</option>
+                            <option value="service">💼 Customer Services</option>
+                        </select>
                     </div>
 
-                    <div id="progress-container" class="hidden space-y-6">
-                        <div class="flex justify-between items-end">
-                            <div>
-                                <p class="text-xs font-black text-slate-400 uppercase tracking-widest">Processing</p>
-                                <h5 class="text-lg font-bold">Verifying Records...</h5>
+                    <!-- Gemini Brainstormed Keyword Badges -->
+                    <div id="aiExpandedList" class="hidden space-y-2 p-3 bg-indigo-50/50 rounded-xl border border-indigo-100 transition-all">
+                        <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest flex items-center gap-1">
+                            <i data-lucide="cpu" class="w-3 h-3"></i> AI Expanded Seeds
+                        </p>
+                        <div id="aiKeywordsContainer" class="flex flex-wrap gap-1.5"></div>
+                    </div>
+                </section>
+
+                <!-- Limits, Extensions & Beast Mode -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+                    <div class="flex items-center gap-2 font-semibold text-slate-700 text-sm">
+                        <i data-lucide="sliders" class="w-4 h-4 text-indigo-600"></i>
+                        <span>Extensions & Limits</span>
+                    </div>
+
+                    <!-- TLD Grid (Pre-selected with Locked .top focus) -->
+                    <div class="space-y-1.5">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Target Extension</label>
+                        <div class="p-3 bg-indigo-50 border border-indigo-200 rounded-xl flex justify-between items-center text-xs font-bold text-indigo-700 shadow-sm">
+                            <span>Locked Extension: .top</span>
+                            <span class="bg-indigo-600 text-white text-[10px] px-2 py-0.5 rounded">Selected</span>
+                        </div>
+                    </div>
+
+                    <!-- Target Count Range Slider (Capped at 500 max) -->
+                    <div class="pt-2">
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Target Results Count</label>
+                            <span class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2 rounded" id="maxCountDisplay">500</span>
+                        </div>
+                        <input type="range" id="maxCountRange" min="50" max="500" step="50" value="500" class="w-full appearance-none bg-transparent">
+                    </div>
+
+                    <!-- Beast Mode Toggle -->
+                    <div class="p-4 bg-slate-900 rounded-xl border border-slate-850 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="flame" class="w-4 h-4 text-orange-500 animate-bounce"></i>
+                                <span class="text-xs font-bold text-white uppercase tracking-wider">Beast Mode</span>
                             </div>
-                            <span id="progress-text" class="text-2xl font-black text-indigo-600">0%</span>
+                            <label class="relative inline-flex items-center cursor-pointer select-none">
+                                <input type="checkbox" id="beastModeToggle" class="sr-only peer">
+                                <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
                         </div>
-                        <div class="w-full h-4 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                            <div id="progress-bar" class="h-full bg-indigo-600 transition-all duration-300 shadow-indigo-500/40" style="width: 0%"></div>
-                        </div>
-                        <div id="log-terminal" class="bg-slate-900 p-5 rounded-2xl font-mono text-[11px] h-40 overflow-y-auto space-y-1.5 border border-slate-800 custom-scrollbar text-slate-300">
-                            <div class="text-indigo-400">Initializing filter sequence...</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- STEP 3: RESULTS -->
-                <div id="step-3" class="hidden text-center py-10 space-y-8 animate-in zoom-in-95">
-                    <div class="relative inline-block">
-                        <div class="w-24 h-24 bg-green-100 dark:bg-green-950/30 rounded-full flex items-center justify-center mx-auto">
-                            <i data-lucide="check-circle-2" class="w-12 h-12 text-green-600"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <h2 class="text-3xl font-black">Filtration Complete</h2>
-                        <p id="result-summary" class="text-slate-500 mt-3 max-w-sm mx-auto leading-relaxed">
-                            We identified 0 domains that had no activity.
+                        <p class="text-[10px] text-slate-400 leading-relaxed">
+                            Automatically opens purchase tabs for all available, verified domains once search completes.
                         </p>
                     </div>
 
-                    <div class="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 flex items-center justify-between max-w-lg mx-auto">
-                        <div class="text-left">
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Clean</p>
-                            <p id="final-count" class="text-3xl font-black">0</p>
+                    <!-- Live API Toggle -->
+                    <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <div>
+                            <span class="block text-xs font-bold text-slate-700">Live API Query</span>
+                            <span class="text-[9px] text-slate-400 font-medium">Bypass Simulation Mode</span>
                         </div>
-                        <button onclick="downloadCSV()" class="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 shadow-xl hover:bg-indigo-700 transition-all">
-                            <i data-lucide="download" class="w-5 h-5"></i> DOWNLOAD CSV
-                        </button>
+                        <label class="relative inline-flex items-center cursor-pointer select-none">
+                            <input type="checkbox" id="liveModeToggle" class="sr-only peer" checked>
+                            <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                        </label>
                     </div>
 
-                    <button onclick="resetApp()" class="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600 transition-colors">
-                        Start new session
+                    <!-- Search Button -->
+                    <button id="searchBtn" class="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 active:scale-[0.98] disabled:bg-slate-300 disabled:shadow-none transition-all flex items-center justify-center gap-2 group">
+                        <i data-lucide="zap" class="w-5 h-5 fill-current"></i>
+                        <span id="searchBtnText">Run 5k Batch Search</span>
                     </button>
+                </section>
+                
+            </aside>
+
+            <!-- MAIN CONTAINER: Status & Table Results -->
+            <main class="lg:col-span-8 space-y-6">
+                
+                <!-- Live Diagnostic Operation Logs -->
+                <div id="diagnosticsCard" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-3">
+                    <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                            <i data-lucide="terminal" class="w-4 h-4 text-indigo-600"></i> Operation Logs & Diagnostics
+                        </span>
+                        <button onclick="document.getElementById('terminalBody').innerHTML = ''" class="text-xs text-slate-400 hover:text-slate-600">Clear</button>
+                    </div>
+                    <div id="terminalBody" class="h-28 overflow-y-auto space-y-1.5 font-mono text-[10px] leading-relaxed text-slate-600 pr-1">
+                        <div>// Ready to generate and verify 500 domain candidates.</div>
+                    </div>
+                </div>
+
+                <!-- MAIN WORKSPACE -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden min-h-[500px] flex flex-col relative">
+                    
+                    <!-- Table Header Controls (Only shown when results are generated) -->
+                    <div id="resultsHeader" class="hidden px-6 py-4 bg-white border-b border-slate-100 flex flex-wrap justify-between items-center sticky top-0 z-10 shadow-sm gap-3">
+                        <div class="flex items-center gap-3">
+                            <h3 class="font-bold text-slate-800 text-sm">Registry Results</h3>
+                            <span id="matchCount" class="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold uppercase tracking-wider"></span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button id="addAllToCartBtn" class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700 transition-all shadow-md active:scale-95">
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                Bulk Purchase
+                            </button>
+                            <button id="downloadCsvBtn" class="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-bold hover:bg-slate-200 transition-all">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ERROR MESSAGE BLOCK -->
+                    <div id="errorMessage" class="hidden m-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-xs flex items-start gap-3">
+                        <i data-lucide="alert-circle" class="w-5 h-5 mt-0.5 text-red-500"></i>
+                        <div>
+                            <span id="errorText" class="font-semibold"></span>
+                            <button onclick="openSettingsModal()" class="block mt-2 underline text-indigo-600 font-bold hover:text-indigo-800">Review Whitelist / Proxy Settings</button>
+                        </div>
+                    </div>
+
+                    <!-- EMPTY STATE -->
+                    <div id="emptyState" class="flex flex-col items-center justify-center flex-grow text-slate-400 py-20 text-center px-10">
+                        <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                            <i data-lucide="cpu" class="w-10 h-10 opacity-20 text-indigo-600"></i>
+                        </div>
+                        <h3 class="text-slate-800 font-semibold mb-1">Enter a Concept</h3>
+                        <p class="text-sm">We'll use AI to expand your idea and find up to 500 100% available domains.</p>
+                    </div>
+
+                    <!-- LOADING STATE -->
+                    <div id="loadingState" class="hidden flex flex-col items-center justify-center flex-grow py-20 text-center px-10">
+                        <div class="relative mb-6">
+                            <div id="loaderRing" class="w-20 h-20 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span id="percentText" class="text-xs font-bold text-indigo-600">0%</span>
+                            </div>
+                        </div>
+                        <p class="text-slate-500 font-medium" id="loadingTitle">AI is brainstorming keywords...</p>
+                        <div class="w-full max-w-xs bg-slate-100 h-1.5 rounded-full mt-4 overflow-hidden mx-auto">
+                            <div id="progressBar" class="bg-indigo-600 h-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-2 uppercase tracking-widest font-mono" id="batchInfo">Initializing...</p>
+                    </div>
+
+                    <!-- MAIN DATAGRID TABLE -->
+                    <div id="resultsTableContainer" class="hidden overflow-x-auto flex-grow custom-scrollbar">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50/80 text-slate-500 sticky top-0 z-10">
+                                    <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest border-b border-slate-100">Domain Name</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest border-b border-slate-100">Category Tags</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest border-b border-slate-100">Double-Check Status</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest border-b border-slate-100 text-right">Price (USD)</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest border-b border-slate-100 text-center">Buy</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsBody" class="divide-y divide-slate-50 text-xs"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </main>
+
+        </div>
+
+        <!-- FOOTER / STATS OVERVIEW -->
+        <footer class="bg-slate-900 rounded-3xl p-8 text-slate-400 border border-slate-800 overflow-hidden relative">
+            <div class="relative z-10 grid md:grid-cols-2 gap-12">
+                <div>
+                    <h4 class="text-white font-bold mb-4 flex items-center gap-2">
+                        <i data-lucide="check-square" class="w-4 h-4 text-indigo-400"></i>
+                        Double-Check Scalability Target
+                    </h4>
+                    <p class="text-sm leading-relaxed mb-4">
+                        Beast Mode handles the <strong>Batch Check</strong> and <strong>Bulk Purchase</strong> automation, filtering through thousands of combinations to capture pristine, verified brand assets in real-time.
+                    </p>
+                    <div class="flex gap-4">
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/10 flex-1">
+                            <p class="text-[10px] text-indigo-400 font-bold uppercase mb-1">Batch Slicing</p>
+                            <p class="text-xs text-white">100 Queries / Batch</p>
+                        </div>
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/10 flex-1">
+                            <p class="text-[10px] text-green-400 font-bold uppercase mb-1">Pass 2 Verification</p>
+                            <p class="text-xs text-white">100% Real-Time Accurate</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-black/30 rounded-2xl p-4 border border-white/5 font-mono text-[11px] leading-relaxed overflow-hidden">
+                    <p class="text-indigo-400">// Automated Beast Mode Sequence</p>
+                    <p class="text-slate-300">if (isBeastMode) {</p>
+                    <p class="text-slate-300 ml-4">const available = filterResults(results);</p>
+                    <p class="text-slate-300 ml-4">triggerBulkBuy(available);</p>
+                    <p class="text-slate-300">}</p>
+                    <div class="mt-4 pt-4 border-t border-white/5 flex justify-between">
+                        <span class="text-slate-500 uppercase tracking-tighter">Current Target:</span>
+                        <span class="text-indigo-400 font-bold" id="footerTotal">500 Assets</span>
+                    </div>
                 </div>
             </div>
-        </main>
-
-        <footer class="mt-12 text-center text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] space-y-2">
-            <p>© 2024 Domain Verification Logic</p>
-            <div class="flex justify-center gap-4">
-                <span>Direct API Connection</span>
-                <span>•</span>
-                <span>No Data Tracking</span>
-            </div>
+            <div class="absolute -bottom-12 -left-12 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full"></div>
         </footer>
+
     </div>
 
-    <!-- Scripts -->
-    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
-    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+    <!-- SETTINGS & CONFIGURATION MODAL -->
+    <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-teal-400"></div>
+            
+            <div class="flex justify-between items-center mb-5">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i data-lucide="settings" class="w-5 h-5 text-indigo-600"></i> Settings & Credentials
+                </h3>
+                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
 
+            <div class="max-h-[70vh] overflow-y-auto space-y-5 pr-1 text-xs">
+                
+                <!-- IP Assistant Widget -->
+                <div class="bg-indigo-50 border border-indigo-100 p-3.5 rounded-xl space-y-2">
+                    <div class="flex justify-between items-center font-bold text-indigo-700">
+                        <span><i class="fa-solid fa-network-wired mr-1"></i> Your Public IP Whitelist Assistant:</span>
+                        <button onclick="detectUserIP()" class="text-[10px] bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-0.5 rounded">
+                            Refresh
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between bg-slate-900 p-2 rounded border border-slate-950 mt-1">
+                        <code id="detectedIP" class="text-slate-100 font-mono">Loading IP...</code>
+                        <button onclick="copyToClipboard('detectedIP')" class="text-slate-300 hover:text-white text-[11px] font-bold flex items-center gap-1">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy IP
+                        </button>
+                    </div>
+                    <p class="text-[10px] text-slate-500 leading-relaxed">
+                        Add this IP inside your **Dynadot Account Panel &rarr; Tools &rarr; API** settings to authorize live requests.
+                    </p>
+                </div>
+
+                <!-- API KEYS GROUP -->
+                <div class="space-y-4">
+                    <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-1.5 flex items-center gap-1">
+                        <i data-lucide="key" class="w-3.5 h-3.5"></i> Dynadot API (Keys Encoded)
+                    </h4>
+                    
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">API Production Key</label>
+                        <div class="relative">
+                            <input type="password" id="apiProdKey" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-xs font-mono text-slate-700 p-2.5 pr-10 rounded-lg outline-none" value="7Y7Y6S7Ke7a8D7p6x7D8z6hK6p6L6S7E6HFlPt0V">
+                            <button onclick="togglePasswordVisibility('apiProdKey')" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
+                                <i class="fa-solid fa-eye text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Secret Key</label>
+                        <div class="relative">
+                            <input type="password" id="apiSecretKey" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-xs font-mono text-slate-700 p-2.5 pr-10 rounded-lg outline-none" value="0fda7d4059732e9e338ed2e5beea85bf1074cab92058833ef0e3330b8a2cdae4">
+                            <button onclick="togglePasswordVisibility('apiSecretKey')" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
+                                <i class="fa-solid fa-eye text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">CORS Proxy Strategy</label>
+                        <select id="proxySelect" onchange="toggleProxyOption()" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-xs font-semibold text-slate-700 p-2.5 rounded-lg outline-none cursor-pointer">
+                            <option value="corsproxy">🚀 corsproxy.io (Optimized Wrapper)</option>
+                            <option value="allorigins">🛰️ api.allorigins.win (Failsafe Relay)</option>
+                            <option value="custom">🛠️ Custom VPS Proxy / API URL</option>
+                            <option value="direct">❌ Direct Connection (No proxy relay)</option>
+                        </select>
+                    </div>
+
+                    <div id="customProxyGroup" class="hidden">
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Custom VPS Proxy URL</label>
+                        <input type="text" id="customProxyUrl" class="w-full bg-slate-50 border border-slate-200 text-xs font-mono text-slate-700 p-2.5 rounded-lg outline-none" placeholder="https://your-custom-proxy.com/proxy?url=">
+                    </div>
+                </div>
+
+                <!-- WEBHOOK CONFIGURATION -->
+                <div class="space-y-4 border-t border-slate-100 pt-4">
+                    <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-1.5 flex items-center gap-1">
+                        <i data-lucide="cloud-lightning" class="w-3.5 h-3.5 text-indigo-600"></i> Webhook & Automation
+                    </h4>
+                    
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Webhook Target Endpoint</label>
+                        <input type="text" id="webhookUrl" class="w-full bg-slate-50 border border-slate-200 text-xs font-mono text-slate-700 p-2.5 rounded-lg outline-none" placeholder="https://hook.us1.make.com/your-custom-webhook-endpoint">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Webhook Production Key</label>
+                        <div class="relative">
+                            <input type="password" id="webhookProdKey" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-xs font-mono text-slate-700 p-2.5 pr-10 rounded-lg outline-none" value="webhook_7h637p728q6u7G7N8NA7vS9D8D7b06M6S737nwK6br8av8Q6T7v8yj6Z6e7x">
+                            <button onclick="togglePasswordVisibility('webhookProdKey')" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
+                                <i class="fa-solid fa-eye text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Webhook Secret Key</label>
+                        <div class="relative">
+                            <input type="password" id="webhookSecretKey" class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-xs font-mono text-slate-700 p-2.5 pr-10 rounded-lg outline-none" value="webhook_093df98a736c8a89f6d4646f6b74aef962cf237f971cd3e5ebe7da155a74320c">
+                            <button onclick="togglePasswordVisibility('webhookSecretKey')" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
+                                <i class="fa-solid fa-eye text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <div>
+                            <span class="block text-xs font-bold text-slate-700">Auto-Push on Completion</span>
+                            <span class="text-[10px] text-slate-400 font-medium">Instantly send data to Make.com once search completes</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer select-none">
+                            <input type="checkbox" id="autoWebhookToggle" class="sr-only peer">
+                            <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex justify-end gap-2.5 mt-6 border-t border-slate-200 pt-4">
+                <button onclick="closeSettingsModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs py-2 px-4 rounded-xl transition-all">
+                    Cancel
+                </button>
+                <button onclick="saveSettings()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2 px-4 rounded-xl transition-all shadow-md">
+                    Apply & Save Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN ENGINE CODE -->
     <script>
-        // --- State ---
-        let config = {
-            clientId: '649490790404-ksu6mbsr7iq24c615gt2imafm8clprrb.apps.googleusercontent.com',
-            apiKey: 'AIzaSyDDLtAH-58Gpz1Q8Z7Q1tqGIcMdgPAGVpA'
-        };
+        const apiKey = ""; // Kept blank for Gemini runtime context injection
         
-        let tokenClient;
-        let gapiInited = false;
-        let gisInited = false;
-        let fileData = [];
-        let cleanResults = [];
-        let isAuth = false;
+        // Locked Domain TLD for search execution
+        const TARGET_TLD = '.top';
+        const BASE_PRICE = 2.99; // Standard registration base price for .top
 
-        // --- Init UI ---
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            
-            // Set default dates
-            const end = new Date();
-            const start = new Date();
-            start.setDate(end.getDate() - 30);
-            document.getElementById('date-start').value = start.toISOString().split('T')[0];
-            document.getElementById('date-end').value = end.toISOString().split('T')[0];
+        // Custom curated keyword dictionary for niche focuses
+        const nicheKeywordsDict = {
+            production: ['prod', 'build', 'factory', 'forge', 'studio', 'core', 'prime', 'output', 'apex', 'craft'],
+            marketing: ['growth', 'leads', 'click', 'funnel', 'reach', 'brand', 'viral', 'promo', 'hook', 'target'],
+            email: ['inbox', 'blast', 'mail', 'send', 'relay', 'deliver', 'bulk', 'letter', 'notify', 'sender'],
+            mortgage: ['loan', 'mortgage', 'lend', 'rates', 'equity', 'vault', 'house', 'fund', 'home', 'equity'],
+            service: ['desk', 'hub', 'assist', 'care', 'suite', 'agent', 'pulse', 'sync', 'staff', 'care']
+        };
 
-            // Setup listeners
-            document.getElementById('file-input').addEventListener('change', handleFileSelect);
-            
-            // Populate settings
-            document.getElementById('input-client-id').value = config.clientId;
-            document.getElementById('input-api-key').value = config.apiKey;
-        });
+        const PREFIXES = ['', 'get', 'try', 'go', 'my', 'the', 'use', 'real', 'best', 'pro', 'buy', 'new', 'easy', 'smart', 'pure', 'fast', 'pro', 'ultra', 'max', 'epic', 'instant', 'mega', 'super', 'prime', 'top', 'all', 'one', 'simply', 'your', 'just', 'vibe', 'nova', 'zen'];
+        const SUFFIXES = ['', 'app', 'hub', 'ai', 'tech', 'hq', 'lab', 'flow', 'plus', 'site', 'online', 'world', 'box', 'zone', 'ly', 'ify', 'core', 'web', 'nest', 'line', 'way', 'link', 'base', 'spot', 'grid', 'set', 'view', 'point', 'dash', 'sky', 'star'];
 
-        // --- Google API Handlers ---
-        function gapiLoaded() {
-            gapi.load('client', initializeGapiClient);
-        }
+        // Global State variables
+        let appMode = 'live'; // Defaults to Live in production
+        let maxCount = 500;
+        let activeResults = [];
+        let brainstormedKeywords = [];
+        let isBeastMode = false;
 
-        async function initializeGapiClient() {
-            try {
-                await gapi.client.init({
-                    apiKey: config.apiKey,
-                    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest'],
-                });
-                gapiInited = true;
-                maybeEnableButtons();
-            } catch (e) {
-                showAlert("GAPI Client failed to load. Check API Key restrictions.");
-            }
-        }
+        const els = {
+            keywordInput: document.getElementById('keywordInput'),
+            aiList: document.getElementById('aiExpandedList'),
+            aiKeywords: document.getElementById('aiKeywordsContainer'),
+            range: document.getElementById('maxCountRange'),
+            rangeVal: document.getElementById('maxCountDisplay'),
+            footerTotal: document.getElementById('footerTotal'),
+            searchBtn: document.getElementById('searchBtn'),
+            searchBtnText: document.getElementById('searchBtnText'),
+            resultsBody: document.getElementById('resultsBody'),
+            tableContainer: document.getElementById('resultsTableContainer'),
+            header: document.getElementById('resultsHeader'),
+            empty: document.getElementById('emptyState'),
+            loading: document.getElementById('loadingState'),
+            error: document.getElementById('errorMessage'),
+            errorText: document.getElementById('errorText'),
+            matchCount: document.getElementById('matchCount'),
+            downloadBtn: document.getElementById('downloadCsvBtn'),
+            addAllToCartBtn: document.getElementById('addAllToCartBtn'),
+            progressBar: document.getElementById('progressBar'),
+            percentText: document.getElementById('percentText'),
+            batchInfo: document.getElementById('batchInfo'),
+            loadingTitle: document.getElementById('loadingTitle'),
+            beastToggle: document.getElementById('beastModeToggle'),
+            loaderRing: document.getElementById('loaderRing'),
+            liveModeToggle: document.getElementById('liveModeToggle')
+        };
 
-        function gisLoaded() {
-            tokenClient = google.accounts.oauth2.initTokenClient({
-                client_id: config.clientId,
-                scope: 'https://www.googleapis.com/auth/gmail.readonly',
-                callback: (resp) => {
-                    if (resp.error) {
-                        showAlert(`Auth Error: ${resp.error}`);
-                        return;
-                    }
-                    isAuth = true;
-                    updateAuthUI();
+        function init() {
+            // Initializing range displays
+            els.range.addEventListener('input', e => {
+                maxCount = parseInt(e.target.value);
+                els.rangeVal.textContent = maxCount;
+                els.footerTotal.textContent = `${maxCount} Assets`;
+            });
+
+            // Auto Toggle for Beast Mode
+            els.beastToggle.addEventListener('change', (e) => {
+                isBeastMode = e.target.checked;
+                if (isBeastMode) {
+                    els.searchBtn.classList.add('beast-glow', 'bg-slate-900');
+                    els.searchBtnText.textContent = "Run Beast Search & Buy";
+                } else {
+                    els.searchBtn.classList.remove('beast-glow', 'bg-slate-900');
+                    els.searchBtnText.textContent = "Run 5k Batch Search";
                 }
             });
-            gisInited = true;
-            maybeEnableButtons();
+
+            // Auto Toggle for Live Mode
+            els.liveModeToggle.addEventListener('change', (e) => {
+                updateModeState(e.target.checked);
+            });
+
+            // Set Initial Live / Demo state matching checkbox
+            updateModeState(els.liveModeToggle.checked);
+
+            lucide.createIcons();
+            detectUserIP();
         }
 
-        function maybeEnableButtons() {
-            // Logic to enable buttons once both libs are ready
-        }
-
-        function handleAuth() {
-            tokenClient.requestAccessToken({prompt: 'consent'});
-        }
-
-        async function updateAuthUI() {
-            document.getElementById('auth-status-unconnected').classList.add('hidden');
-            document.getElementById('auth-status-connected').classList.remove('hidden');
-            
-            // Get user email
-            try {
-                const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                    headers: { Authorization: `Bearer ${gapi.client.getToken().access_token}` }
-                });
-                const data = await response.json();
-                document.getElementById('connected-email').textContent = data.email;
-            } catch (e) {
-                document.getElementById('connected-email').textContent = "Account Connected";
+        function updateModeState(isLive) {
+            const badge = document.getElementById('modeBadge');
+            if (!badge) return; // Guard clause against null target elements during startup
+            if (isLive) {
+                appMode = 'live';
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Live API`;
+                badge.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 shadow-sm";
+                logTerminal("Live mode active. Whitelist your IP in the Dynadot Account Portal.", 'warning');
+            } else {
+                appMode = 'demo';
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span> Simulation Mode`;
+                badge.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200 shadow-sm";
+                logTerminal("Switched to offline Simulation Mode.", 'info');
             }
         }
 
-        // --- Logic Handlers ---
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        // Webhook Dispatch System
+        async function sendDataToWebhook() {
+            const webhookUrl = document.getElementById('webhookUrl').value.trim();
+            const webhookProdKey = document.getElementById('webhookProdKey').value.trim();
+            const webhookSecretKey = document.getElementById('webhookSecretKey').value.trim();
+            const pushBtn = document.getElementById('webhookBtn');
 
-            document.getElementById('display-filename').textContent = file.name;
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                const data = e.target.result;
-                const workbook = XLSX.read(data, { type: 'binary' });
-                const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                const json = XLSX.utils.sheet_to_json(sheet);
-                
-                fileData = json.map(row => {
-                    let domain = '';
-                    let expiry = '';
-                    Object.keys(row).forEach(key => {
-                        const k = key.toLowerCase();
-                        if (k.includes('domain')) domain = row[key];
-                        if (k.includes('expiry') || k.includes('date')) expiry = row[key];
-                    });
-                    return { domain, expiry };
-                }).filter(item => item.domain);
-
-                if (fileData.length === 0) {
-                    showAlert("No domains found. Please ensure the file has a 'Domain' column.");
-                    return;
-                }
-
-                document.getElementById('display-count').textContent = `${fileData.length} domains detected`;
-                switchStep(2);
-            };
-            reader.readAsBinaryString(file);
-        }
-
-        async function startFiltration() {
-            if (!isAuth) {
-                handleAuth();
+            if (!webhookUrl) {
+                logTerminal("Webhook skipped: Webhook Target URL is empty.", 'warning');
                 return;
             }
 
-            document.getElementById('run-container').classList.add('hidden');
-            document.getElementById('progress-container').classList.remove('hidden');
-            
-            cleanResults = [];
-            const start = document.getElementById('date-start').value.replace(/-/g, '/');
-            const end = document.getElementById('date-end').value.replace(/-/g, '/');
-            const logPanel = document.getElementById('log-terminal');
-            logPanel.innerHTML = '';
-
-            for (let i = 0; i < fileData.length; i++) {
-                const item = fileData[i];
-                const query = `${item.domain} after:${start} before:${end}`;
-                
-                try {
-                    const response = await gapi.client.gmail.users.messages.list({
-                        'userId': 'me',
-                        'q': query,
-                        'maxResults': 1
-                    });
-                    
-                    const hasMail = response.result.resultSizeEstimate > 0;
-                    
-                    if (!hasMail) {
-                        cleanResults.push(item);
-                        addLog(`✓ CLEAN: ${item.domain}`, 'text-green-400');
-                    } else {
-                        addLog(`× FILTERED: ${item.domain}`, 'text-slate-500');
-                    }
-                } catch (err) {
-                    addLog(`! ERROR: ${item.domain}`, 'text-red-400');
-                }
-
-                const progress = Math.round(((i + 1) / fileData.length) * 100);
-                document.getElementById('progress-bar').style.width = `${progress}%`;
-                document.getElementById('progress-text').textContent = `${progress}%`;
-                
-                // Rate limit buffer
-                await new Promise(r => setTimeout(r, 120));
+            const verifiedDomains = activeResults.filter(item => item.available && item.verified);
+            if (verifiedDomains.length === 0) {
+                logTerminal("Webhook skipped: No 100% verified domains found.", 'warning');
+                return;
             }
 
-            // Finish
-            document.getElementById('result-summary').textContent = `Success! We identified ${cleanResults.length} domains that had no email activity in the selected range.`;
-            document.getElementById('final-count').textContent = cleanResults.length;
-            switchStep(3);
+            logTerminal("📤 Dispatched results to Make.com Webhook...", "info");
+
+            const payload = {
+                event: "domains_verified",
+                timestamp: new Date().toISOString(),
+                user: "ashwinaray",
+                credentials: {
+                    production_key: webhookProdKey,
+                    secret_key: webhookSecretKey
+                },
+                results_summary: {
+                    total_scanned: activeResults.length,
+                    verified_available_count: verifiedDomains.length
+                },
+                domains: verifiedDomains.map(item => ({
+                    domain: item.domain,
+                    price: item.price
+                }))
+            };
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Webhook-Production-Key': webhookProdKey,
+                        'X-Webhook-Secret-Key': webhookSecretKey
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    logTerminal("Webhook dispatched successfully!", 'success');
+                } else {
+                    logTerminal(`Webhook endpoint returned status ${response.status}.`, 'warning');
+                }
+            } catch (error) {
+                logTerminal(`Webhook dispatch failed: ${error.message}`, 'error');
+            }
         }
 
-        function addLog(msg, colorClass) {
-            const div = document.createElement('div');
-            div.className = colorClass;
-            div.innerHTML = `<span class="opacity-30 mr-2">[${new Date().toLocaleTimeString()}]</span> ${msg}`;
-            const panel = document.getElementById('log-terminal');
-            panel.prepend(div);
+        // Detect Client IP
+        async function detectUserIP() {
+            const ipEl = document.getElementById('detectedIP');
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                ipEl.innerText = data.ip;
+            } catch (err) {
+                ipEl.innerText = "Offline / Error fetching IP";
+            }
         }
 
-        function downloadCSV() {
-            const ws = XLSX.utils.json_to_sheet(cleanResults);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "CleanDomains");
-            XLSX.writeFile(wb, `Clean_Domains_${Date.now()}.csv`);
+        // Copy IP to Clipboard
+        function copyToClipboard(elementId) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            const tempInput = document.createElement("input");
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            logTerminal(`Copied client IP to clipboard: ${textToCopy}`, 'info');
         }
 
-        // --- Utility ---
-        function switchStep(num) {
-            [1, 2, 3].forEach(n => {
-                document.getElementById(`step-${n}`).classList.add('hidden');
-            });
-            document.getElementById(`step-${num}`).classList.remove('hidden');
+        // Toggle modal
+        function openSettingsModal() {
+            detectUserIP();
+            document.getElementById('settingsModal').classList.remove('hidden');
         }
 
-        function resetApp() {
-            fileData = [];
-            document.getElementById('file-input').value = '';
-            document.getElementById('run-container').classList.remove('hidden');
-            document.getElementById('progress-container').classList.add('hidden');
-            switchStep(1);
-        }
-
-        function toggleSettings() {
-            const panel = document.getElementById('settings-panel');
-            panel.classList.toggle('hidden');
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
         }
 
         function saveSettings() {
-            config.clientId = document.getElementById('input-client-id').value;
-            config.apiKey = document.getElementById('input-api-key').value;
-            toggleSettings();
-            showAlert("Settings updated. Initializing again...", "bg-indigo-50", "text-indigo-700");
-            gapiLoaded();
-            gisLoaded();
+            closeSettingsModal();
+            logTerminal("Saved credentials and custom proxy options.", 'success');
         }
 
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            const icon = document.getElementById('dark-icon');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                icon.setAttribute('data-lucide', 'moon');
+        function togglePasswordVisibility(id) {
+            const el = document.getElementById(id);
+            el.type = el.type === "password" ? "text" : "password";
+        }
+
+        function toggleProxyOption() {
+            const proxyType = document.getElementById('proxySelect').value;
+            const customGroup = document.getElementById('customProxyGroup');
+            if (proxyType === 'custom') {
+                customGroup.classList.remove('hidden');
             } else {
-                html.classList.add('dark');
-                icon.setAttribute('data-lucide', 'sun');
+                customGroup.classList.add('hidden');
             }
+        }
+
+        // Auto-Generate Unique Keywords Based on Selection
+        function autoGenerateKeywords() {
+            const selectedNiche = document.getElementById('nicheSelect').value;
+            let keywordsPool = [];
+
+            if (selectedNiche === 'mixed') {
+                Object.values(nicheKeywordsDict).forEach(arr => {
+                    keywordsPool = [...keywordsPool, ...arr];
+                });
+            } else {
+                keywordsPool = nicheKeywordsDict[selectedNiche] || nicheKeywordsDict['marketing'];
+            }
+
+            keywordsPool.sort(() => 0.5 - Math.random());
+            const picked = keywordsPool.slice(0, 5);
+            els.keywordInput.value = picked.join(', ');
+            logTerminal(`✨ Generated keywords for [${selectedNiche.toUpperCase()}]: ${picked.join(', ')}`, 'info');
+        }
+
+        // Operation logging terminal helper
+        function logTerminal(message, type = 'info') {
+            const term = document.getElementById('terminalBody');
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+            let colorClass = "text-slate-600";
+
+            if (type === 'success') colorClass = "text-emerald-600 font-semibold";
+            if (type === 'warning') colorClass = "text-amber-600 font-semibold";
+            if (type === 'error') colorClass = "text-rose-600 font-bold";
+            if (type === 'info') colorClass = "text-indigo-600";
+
+            term.innerHTML += `<div class="${colorClass}"><span class="text-slate-400 font-mono">[${timeStr}]</span> ${message}</div>`;
+            term.scrollTop = term.scrollHeight;
+        }
+
+        // Brainstorm Keywords utilizing Gemini 2.5 Flash API
+        async function brainstormKeywords(seed) {
+            if (!apiKey) {
+                // If API key is empty/not configured, fall back to offline keyword combinations
+                logTerminal("Gemini API key is blank. Falling back to semantic word generation.", 'warning');
+                const cleanSeeds = seed.split(/[\s,]+/).filter(x => x.length > 1);
+                return [seed, ...cleanSeeds, "hq", "pro", "core", "plus", "direct", "best", "hub", "flow", "link"];
+            }
+
+            const prompt = `Generate exactly 10 high-value, single-word or short-phrase related keywords for a brand centered on "${seed}". Return only a JSON array of strings.`;
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                return JSON.parse(text);
+            } catch (err) {
+                logTerminal(`Gemini API connection failed: ${err.message}. Triggering offline word-bank fallback.`, 'warning');
+                return [seed, "brand", "hq", "core", "plus", "hub", "global", "prime", "direct", "desk"];
+            }
+        }
+
+        // Core Combinations Algorithm
+        function runCombinations(seeds) {
+            const domainsSet = new Set();
+            const cleanSeeds = seeds.map(s => s.toLowerCase().trim().replace(/[^a-z0-9]/g, '')).filter(s => s.length > 1);
+
+            // Cross combinatorics
+            for (let i = 0; i < cleanSeeds.length; i++) {
+                for (let j = 0; j < cleanSeeds.length; j++) {
+                    if (i !== j) {
+                        domainsSet.add(`${cleanSeeds[i]}${cleanSeeds[j]}${TARGET_TLD}`);
+                    }
+                }
+            }
+
+            // Prefix additions
+            for (const p of PREFIXES) {
+                for (const seed of cleanSeeds) {
+                    domainsSet.add(`${p}${seed}${TARGET_TLD}`);
+                }
+            }
+
+            // Suffix additions
+            for (const seed of cleanSeeds) {
+                for (const s of SUFFIXES) {
+                    domainsSet.add(`${seed}${s}${TARGET_TLD}`);
+                }
+            }
+
+            // Shuffle and limit output to locked maxCount (up to 500)
+            let list = Array.from(domainsSet);
+            list.sort(() => 0.5 - Math.random());
+            return list.slice(0, maxCount);
+        }
+
+        // Submits Domain Queries in batches of 100 to Dynadot API
+        async function queryDomainBatch(domains, isRecheck = false) {
+            if (domains.length === 0) return [];
+
+            if (appMode === 'demo') {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        const simulated = domains.map(dom => {
+                            let available = false;
+                            const wordLength = dom.replace(TARGET_TLD, '').length;
+                            const r = Math.random();
+                            
+                            if (isRecheck) {
+                                available = r < 0.98; // 98% pass re-check simulation
+                            } else {
+                                if (wordLength < 8) available = r < 0.15;
+                                else if (wordLength < 12) available = r < 0.40;
+                                else available = r < 0.70;
+                            }
+
+                            return {
+                                domain: dom,
+                                available: available,
+                                price: available ? BASE_PRICE : null
+                            };
+                        });
+                        resolve(simulated);
+                    }, 800);
+                });
+            } else {
+                const apiProd = document.getElementById('apiProdKey').value;
+                const proxyType = document.getElementById('proxySelect').value;
+                
+                let queryStr = `key=${apiProd}&command=search&show_price=1&currency=USD`;
+                domains.forEach((dom, idx) => {
+                    queryStr += `&domain${idx}=${encodeURIComponent(dom)}`;
+                });
+
+                const targetApiUrl = `https://api.dynadot.com/api3.json?${queryStr}`;
+                let requestUrl = targetApiUrl;
+
+                if (proxyType === 'corsproxy') {
+                    requestUrl = `https://corsproxy.io/?${encodeURIComponent(targetApiUrl)}`;
+                } else if (proxyType === 'allorigins') {
+                    requestUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetApiUrl)}`;
+                } else if (proxyType === 'custom') {
+                    const customBase = document.getElementById('customProxyUrl').value.trim();
+                    if (!customBase) throw new Error("Custom proxy base input is empty.");
+                    requestUrl = customBase + encodeURIComponent(targetApiUrl);
+                }
+
+                try {
+                    const response = await fetch(requestUrl);
+                    if (response.status === 403) {
+                        throw new Error("Dynadot API / Proxy threw a 403 Forbidden. Is your client IP Whitelisted in Dynadot settings?");
+                    }
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error Status: ${response.status}`);
+                    }
+                    
+                    const text = await response.text();
+                    let data;
+
+                    if (text.trim().startsWith("<html") || text.trim().startsWith("<!DOCTYPE")) {
+                        throw new Error("Target proxy returned raw HTML block instead of JSON (CORS/Authentication exception).");
+                    }
+
+                    try {
+                        data = JSON.parse(text);
+                    } catch (pErr) {
+                        if (proxyType === 'allorigins') {
+                            const wrapped = JSON.parse(text);
+                            data = JSON.parse(wrapped.contents);
+                        } else {
+                            throw pErr;
+                        }
+                    }
+
+                    const searchResults = data?.SearchResponse?.SearchResults || [];
+                    if (searchResults.length === 0 && data?.SearchResponse?.ResponseCode !== "0") {
+                        const errMsg = data?.SearchResponse?.ErrorMessage || "Unknown Dynadot credentials error.";
+                        throw new Error(`Dynadot rejection: ${errMsg}`);
+                    }
+
+                    return searchResults.map(item => ({
+                        domain: item.DomainName,
+                        available: item.Available === 'yes',
+                        price: item.Price ? parseFloat(item.Price) : BASE_PRICE
+                    }));
+
+                } catch (err) {
+                    logTerminal(`Fetch Error: ${err.message}`, 'error');
+                    throw err;
+                }
+            }
+        }
+
+        // Helper to chunk array
+        function chunkArray(array, size) {
+            const result = [];
+            for (let i = 0; i < array.length; i += size) {
+                result.push(array.slice(i, i + size));
+            }
+            return result;
+        }
+
+        // MAIN BULK SCANNING WORKFLOW CONTROLLER
+        async function runSearch() {
+            const seed = els.keywordInput.value.trim();
+            if (!seed) return;
+
+            document.getElementById('connectionErrorBanner').classList.add('hidden');
+            setUIState('loading');
+            els.loadingTitle.textContent = isBeastMode ? "BEAST MODE: Brainstorming..." : "AI Brainstorming...";
+            els.progressBar.style.width = '2%';
+            
+            try {
+                // Step 1: Brainstorm
+                brainstormedKeywords = await brainstormKeywords(seed);
+                els.aiList.classList.remove('hidden');
+                els.aiKeywords.innerHTML = brainstormedKeywords.map(kw => `
+                    <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-[10px] font-bold rounded-md">${kw}</span>
+                `).join('');
+
+                // Step 2: Combine
+                updateStepState(1, 'active');
+                const pool = runCombinations(brainstormedKeywords);
+                document.getElementById('statGenerated').innerText = pool.length;
+                logTerminal(`Synthesized pool of ${pool.length} candidate domains ending in .top`, 'success');
+                updateStepState(1, 'complete');
+
+                // Step 3: Pass 1 Check (Batches of 100)
+                updateStepState(2, 'active');
+                els.loadingTitle.textContent = isBeastMode ? "BEAST MODE: Scanning Registry..." : "Scanning Registry...";
+                
+                const chunks = chunkArray(pool, 100);
+                let firstPassAvailable = [];
+                activeResults = [];
+
+                for (let i = 0; i < chunks.length; i++) {
+                    const batch = chunks[i];
+                    const progress = Math.round(((i + 1) / chunks.length) * 60) + 5;
+                    els.progressBar.style.width = `${progress}%`;
+                    els.percentText.textContent = `${progress}%`;
+                    els.batchInfo.textContent = `Scanning Batch ${i + 1}/${chunks.length} (Found ${firstPassAvailable.length} available)...`;
+
+                    logTerminal(`Querying Batch ${i + 1}/${chunks.length}...`, 'info');
+                    
+                    try {
+                        const batchResults = await queryDomainBatch(batch);
+                        
+                        batchResults.forEach(res => {
+                            // STAGE ONLY AVAILABLE DOMAINS
+                            if (res.available) {
+                                activeResults.push({
+                                    domain: res.domain,
+                                    available: true,
+                                    verified: false,
+                                    price: res.price
+                                });
+                                firstPassAvailable.push(res);
+                            }
+                        });
+
+                        document.getElementById('statPass1').innerText = firstPassAvailable.length;
+                        renderResults();
+                    } catch (batchErr) {
+                        logTerminal(`Batch Query Blocked: ${batchErr.message}`, 'error');
+                        document.getElementById('connectionErrorBanner').classList.remove('hidden');
+                        document.getElementById('errorText').innerText = batchErr.message;
+                        setUIState('error', batchErr.message);
+                        updateStepState(2, 'error');
+                        return;
+                    }
+
+                    await sleep(1000); // Enforce safe rate-limiting gap
+                }
+
+                updateStepState(2, 'complete');
+
+                // Step 4: Pass 2 Recheck Validation (Double Check Pass)
+                updateStepState(3, 'active');
+                els.loadingTitle.textContent = "BEAST MODE: Double-Check Re-verification...";
+                
+                logTerminal(`Initiating Double-Check pass on ${firstPassAvailable.length} candidates...`, 'warning');
+                
+                const recheckChunks = chunkArray(firstPassAvailable.map(item => item.domain), 100);
+                let finalVerified = [];
+
+                for (let i = 0; i < recheckChunks.length; i++) {
+                    const rcBatch = recheckChunks[i];
+                    const progress = 65 + Math.round(((i + 1) / recheckChunks.length) * 30);
+                    els.progressBar.style.width = `${progress}%`;
+                    els.percentText.textContent = `${progress}%`;
+                    els.batchInfo.textContent = `Double-checking Batch ${i + 1}/${recheckChunks.length}...`;
+
+                    logTerminal(`Double-Checking Match Batch ${i + 1}/${recheckChunks.length}...`, 'warning');
+                    
+                    try {
+                        const rcResults = await queryDomainBatch(rcBatch, true);
+                        
+                        rcResults.forEach(rcRes => {
+                            const original = activeResults.find(x => x.domain === rcRes.domain);
+                            if (original) {
+                                if (rcRes.available) {
+                                    original.verified = true;
+                                    finalVerified.push(original);
+                                } else {
+                                    // FORCE REMOVAL OF LATE FALSE POSITIVES FROM TABLE RENDERING
+                                    original.available = false; 
+                                    original.verified = false;
+                                    logTerminal(`Flagged false positive: [${rcRes.domain}] was bought/cached. Filtered & Removed.`, 'error');
+                                }
+                            }
+                        });
+
+                        document.getElementById('statPass2').innerText = finalVerified.length;
+                        renderResults();
+                    } catch (rcErr) {
+                        logTerminal(`Double check batch failure: ${rcErr.message}`, 'error');
+                    }
+
+                    await sleep(1000);
+                }
+
+                // Accuracy Stats calculations
+                const ratio = firstPassAvailable.length > 0 ? Math.round((finalVerified.length / firstPassAvailable.length) * 100) : 100;
+                document.getElementById('statAccuracy').innerText = `${ratio}%`;
+
+                updateStepState(3, 'complete');
+                logTerminal(`Scan finished. ${finalVerified.length} premium .top domains are 100% available and verified.`, 'success');
+                setUIState('results');
+
+                // Trigger Webhook if auto toggle active
+                const autoWebhook = document.getElementById('autoWebhookToggle').checked;
+                if (autoWebhook) {
+                    sendDataToWebhook();
+                }
+
+                // AUTOMATIC BEAST MODE DISPATCH ACTION
+                if (isBeastMode && finalVerified.length > 0) {
+                    logTerminal("🔥 Beast Mode Toggle Active! Spawning secure checkout workflows...", "success");
+                    setTimeout(() => {
+                        handleBulkAddToCart();
+                    }, 500);
+                }
+
+            } catch (globalErr) {
+                logTerminal(`General sequence failure: ${globalErr.message}`, 'error');
+                setUIState('error', globalErr.message);
+            }
+        }
+
+        // Render Datatable (Filters OUT all taken or failed double-check domains)
+        function renderResults() {
+            const availableOnly = activeResults.filter(r => r.available);
+            
+            // Stats updates
+            els.matchCount.textContent = `${availableOnly.filter(r => r.verified).length} Verified Available`;
+            
+            els.resultsBody.innerHTML = availableOnly.map(res => {
+                let statusBadge = res.verified ? 
+                    `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 uppercase"><i data-lucide="shield-check" class="w-3 h-3"></i> 100% PASS</span>` : 
+                    `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 uppercase animate-pulse"><i data-lucide="loader" class="w-3 h-3 animate-spin"></i> VERIFYING...</span>`;
+
+                const tags = getDomainTags(res.domain);
+                const registerLink = `https://www.dynadot.com/domain/search?domain=${encodeURIComponent(res.domain)}`;
+
+                return `
+                    <tr class="hover:bg-slate-50/80 transition-all border-b border-slate-100 last:border-0">
+                        <td class="px-6 py-3 font-bold text-slate-800 text-sm font-mono">${res.domain}</td>
+                        <td class="px-6 py-3">
+                            <div class="flex flex-wrap gap-1">
+                                ${tags.map(t => `<span class="bg-slate-100 text-slate-500 text-[9px] font-semibold px-1.5 py-0.5 rounded">${t}</span>`).join('')}
+                            </div>
+                        </td>
+                        <td class="px-6 py-3">${statusBadge}</td>
+                        <td class="px-6 py-3 text-right font-mono text-sm">
+                            <span class="text-indigo-600 font-bold">$${res.price.toFixed(2)}</span>
+                        </td>
+                        <td class="px-6 py-3 text-center">
+                            <a href="${registerLink}" target="_blank" class="inline-flex items-center gap-1 px-3 py-1 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700 shadow-sm transition-all">
+                                Register <i data-lucide="shopping-cart" class="w-3 h-3"></i>
+                            </a>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
             lucide.createIcons();
         }
 
-        function showAlert(msg) {
-            const container = document.getElementById('alert-container');
-            const msgEl = document.getElementById('alert-message');
-            msgEl.textContent = msg;
-            container.classList.remove('hidden');
+        function getDomainTags(domain) {
+            const domainBody = domain.replace(TARGET_TLD, '');
+            const tags = [TARGET_TLD.toUpperCase()];
+            for (const [key, list] of Object.entries(nicheKeywordsDict)) {
+                if (list.some(w => domainBody.includes(w))) {
+                    tags.push(key.toUpperCase());
+                }
+            }
+            return tags.slice(0, 3);
         }
 
-        function hideAlert() {
-            document.getElementById('alert-container').classList.add('hidden');
+        // Toggle UI State panels
+        function setUIState(state, msg = '') {
+            els.empty.classList.add('hidden');
+            els.loading.classList.add('hidden');
+            els.tableContainer.classList.add('hidden');
+            els.header.classList.add('hidden');
+            els.error.classList.add('hidden');
+            els.searchBtn.disabled = state === 'loading';
+            
+            if (isBeastMode) {
+                els.searchBtnText.textContent = state === 'loading' ? 'BEAST RUNNING...' : 'Run Beast Search & Buy';
+            } else {
+                els.searchBtnText.textContent = state === 'loading' ? 'Batching...' : 'Run 5k Batch Search';
+            }
+
+            if (state === 'loading') {
+                els.loading.classList.remove('hidden');
+            }
+            if (state === 'results') {
+                els.tableContainer.classList.remove('hidden');
+                els.header.classList.remove('hidden');
+            }
+            if (state === 'error') {
+                els.error.classList.remove('hidden');
+                els.errorText.textContent = msg;
+            }
         }
+
+        // Beast Mode / Cart Multi-open sequence
+        function handleBulkAddToCart() {
+            const verified = activeResults.filter(r => r.available && r.verified).map(r => r.domain);
+            if (verified.length === 0) return;
+
+            // Chunk in groups of 50 to avoid browser blocking multi-tab popups
+            const chunks = [];
+            for (let i = 0; i < verified.length; i += 50) {
+                chunks.push(verified.slice(i, i + 50));
+            }
+
+            chunks.forEach((chunk, i) => {
+                setTimeout(() => {
+                    const searchString = chunk.join(',');
+                    window.open(`https://www.dynadot.com/domain/search?domain=${encodeURIComponent(searchString)}`, '_blank');
+                }, i * 1200);
+            });
+        }
+
+        // CSV Exporter
+        els.downloadBtn.addEventListener('click', () => {
+            const verified = activeResults.filter(r => r.available && r.verified);
+            const csv = [
+                ['Domain', 'Status', 'Base Price (USD)'], 
+                ...verified.map(r => [r.domain, 'Verified Available', r.price.toFixed(2)])
+            ].map(row => row.join(',')).join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `domaindiscovery_100_percent_verified_${Date.now()}.csv`;
+            a.click();
+        });
+
+        els.addAllToCartBtn.addEventListener('click', handleBulkAddToCart);
+        els.searchBtn.addEventListener('click', runSearch);
+
+        function updateStepState(stepNumber, state) {
+            const card = document.getElementById(`stepCard${stepNumber}`);
+            const icon = document.getElementById(`stepIcon${stepNumber}`);
+
+            if (state === 'active') {
+                card.className = "border border-amber-500/30 bg-amber-500/5 p-3.5 rounded-xl transition-all shadow-lg";
+                icon.className = "w-5 h-5 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center text-[10px] font-extrabold animate-pulse";
+            } else if (state === 'complete') {
+                card.className = "border border-emerald-500/30 bg-emerald-500/5 p-3.5 rounded-xl transition-all";
+                icon.className = "w-5 h-5 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-[10px] font-extrabold";
+                icon.innerHTML = `<i class="fa-solid fa-check"></i>`;
+            } else if (state === 'error') {
+                card.className = "border border-rose-500/30 bg-rose-500/5 p-3.5 rounded-xl transition-all";
+                icon.className = "w-5 h-5 rounded-full bg-rose-500 text-slate-100 flex items-center justify-center text-[10px] font-extrabold";
+                icon.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+            } else {
+                card.className = "border border-slate-800 bg-slate-950/40 p-3.5 rounded-xl transition-all";
+                icon.className = "w-5 h-5 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-extrabold";
+                icon.innerHTML = stepNumber;
+            }
+        }
+
+        function updateProgress(percent, label) {
+            document.getElementById('progressBarPercent').innerText = `${percent}%`;
+            document.getElementById('progressBarFill').style.width = `${percent}%`;
+            document.getElementById('progressBarLabel').innerText = label;
+        }
+
+        function resetScanButton() {
+            const btn = document.getElementById('searchBtn');
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-zap"></i> Run 5k Batch Search`;
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Run
+        init();
     </script>
 </body>
 </html>
