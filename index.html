@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOMAIN AVAIBLITY WITH AI</title>
+    <title>DomainDiscovery AI - Beast Mode Registry Verification</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -20,11 +20,11 @@
             background: transparent; 
         }
         .custom-scrollbar::-webkit-scrollbar-thumb { 
-            background: #cbd5e1; 
+            background: #475569; 
             border-radius: 10px; 
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            background: #6366f1;
         }
         
         input[type="range"]::-webkit-slider-thumb { 
@@ -35,33 +35,37 @@
             cursor: pointer; 
             -webkit-appearance: none; 
             margin-top: -7px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
             transition: all 0.15s ease-in-out;
         }
         input[type="range"]::-webkit-slider-thumb:hover {
             transform: scale(1.15);
-            background: #4f46e5;
+            background: #818cf8;
         }
         input[type="range"]::-webkit-slider-runnable-track { 
             width: 100%; 
             height: 4px; 
             cursor: pointer; 
-            background: #e2e8f0; 
+            background: #334155; 
             border-radius: 2px; 
         }
         
-        /* Beast Mode Animation */
+        /* Beast Mode Dynamic Ambient State */
+        .beast-active-bg {
+            background: radial-gradient(circle at 50% 0%, rgba(244, 63, 94, 0.15) 0%, rgba(15, 23, 42, 0.95) 70%);
+            transition: background 1s ease-in-out;
+        }
+        
         .beast-glow {
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.3);
             animation: pulse-beast 2s infinite;
         }
         @keyframes pulse-beast {
             0% { box-shadow: 0 0 5px rgba(99, 102, 241, 0.4); }
-            50% { box-shadow: 0 0 25px rgba(244, 63, 94, 0.6); }
+            50% { box-shadow: 0 0 25px rgba(244, 63, 94, 0.7); }
             100% { box-shadow: 0 0 5px rgba(99, 102, 241, 0.4); }
         }
-
-        /* Gradient Accent Pulse for Process Logs */
+        
         .log-pulse {
             animation: fade-log 1.5s infinite alternate;
         }
@@ -71,10 +75,13 @@
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8 selection:bg-indigo-500/30 selection:text-indigo-200">
+<body id="mainBody" class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8 selection:bg-indigo-500/30 selection:text-indigo-200 transition-colors duration-1000">
 
     <!-- Notification Toast Container -->
-    <div id="toastContainer" class="fixed top-5 right-5 z-50 space-y-3 pointer-events-none"></div>
+    <div id="toastContainer" class="fixed top-5 right-5 z-50 space-y-3 pointer-events-none max-w-sm w-full"></div>
+
+    <!-- Hidden element used for iframe-safe copy clipboard fallback -->
+    <textarea id="clipboardBuffer" class="absolute pointer-events-none opacity-0" aria-hidden="true"></textarea>
 
     <div class="max-w-6xl mx-auto space-y-8">
         
@@ -86,15 +93,15 @@
                         <i data-lucide="zap" class="w-8 h-8 text-indigo-400 fill-indigo-400/20"></i>
                         DomainDiscovery AI
                     </span> 
-                    <span class="text-[10px] tracking-widest uppercase font-bold bg-gradient-to-r from-indigo-500 to-rose-500 text-white px-2.5 py-1 rounded-full shadow-lg border border-indigo-400/20">
-                        BEAST MODE 100%
+                    <span id="beastModeBadge" class="text-[10px] tracking-widest uppercase font-bold bg-slate-800 text-slate-400 px-2.5 py-1 rounded-full shadow-lg border border-slate-700/60 transition-all duration-500">
+                        OFFLINE SPEED
                     </span>
                 </h1>
                 <p class="text-slate-400 text-sm">Automated Digital Marketing Brand Acquisition & Bulk Registry Filter</p>
             </div>
             
             <div class="flex items-center gap-3 self-start md:self-center">
-                <div class="px-4 py-2 bg-slate-800/80 border border-slate-700/60 rounded-2xl shadow-xl flex items-center gap-3 backdrop-blur-md">
+                <div class="px-4 py-2 bg-slate-900/80 border border-slate-800 rounded-2xl shadow-xl flex items-center gap-3 backdrop-blur-md">
                     <div class="text-right">
                         <p class="text-[9px] text-slate-500 uppercase font-extrabold tracking-wider">Account Operator</p>
                         <p class="text-xs font-semibold text-slate-200">ashwinaray</p>
@@ -113,7 +120,7 @@
             <aside class="lg:col-span-5 space-y-6">
                 
                 <!-- STEP 1: Enter Reference Keywords -->
-                <section class="bg-slate-800/50 backdrop-blur-md p-6 rounded-3xl border border-slate-700/60 space-y-4 shadow-xl relative overflow-hidden group">
+                <section class="bg-slate-900/50 backdrop-blur-md p-6 rounded-3xl border border-slate-800 space-y-4 shadow-xl relative overflow-hidden group">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 blur-3xl rounded-full transition-all duration-500 group-hover:bg-indigo-500/10"></div>
                     
                     <div class="flex items-center justify-between">
@@ -126,22 +133,22 @@
                     
                     <div class="space-y-3">
                         <p class="text-xs text-slate-400 leading-relaxed">
-                            Type a primary marketing seed concept. The AI brainstormer will expand it into high-conversion digital marketing phrases.
+                            Type a primary marketing seed concept. The AI brainstormer expands it into high-conversion digital marketing phrases.
                         </p>
                         
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-2.5">
                             <input type="text" id="keywordInput" placeholder="e.g. Social Growth Agency" 
-                                class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all text-sm text-slate-100 placeholder:text-slate-600 font-medium">
+                                class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all text-sm text-slate-100 placeholder:text-slate-700 font-medium">
                             
-                            <button id="aiGenerateBtn" class="w-full py-2.5 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 active:scale-[0.99] text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/10">
-                                <i data-lucide="sparkles" class="w-4 h-4 animate-pulse text-indigo-200"></i>
+                            <button id="aiGenerateBtn" class="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 active:scale-[0.99] text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/10">
+                                <i data-lucide="sparkles" class="w-4 h-4 text-indigo-200"></i>
                                 Auto-Generate AI Keywords
                             </button>
                         </div>
                     </div>
 
                     <!-- AI Generated Dynamic Badges -->
-                    <div id="aiExpandedList" class="hidden space-y-2.5 p-3.5 bg-slate-900/80 rounded-2xl border border-slate-700/60 transition-all duration-300">
+                    <div id="aiExpandedList" class="hidden space-y-2.5 p-3.5 bg-slate-950/80 rounded-2xl border border-slate-800 transition-all duration-300">
                         <div class="flex items-center justify-between">
                             <p class="text-[9px] font-extrabold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5">
                                 <span class="inline-block w-1 h-1 rounded-full bg-indigo-400 animate-ping"></span>
@@ -154,7 +161,7 @@
                 </section>
 
                 <!-- STEP 2: Configure Constraints -->
-                <section class="bg-slate-800/50 backdrop-blur-md p-6 rounded-3xl border border-slate-700/60 space-y-6 shadow-xl relative overflow-hidden group">
+                <section class="bg-slate-900/50 backdrop-blur-md p-6 rounded-3xl border border-slate-800 space-y-6 shadow-xl relative overflow-hidden group">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 blur-3xl rounded-full transition-all duration-500 group-hover:bg-purple-500/10"></div>
                     
                     <div class="flex items-center justify-between">
@@ -162,6 +169,17 @@
                             <span class="w-6 h-6 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-mono border border-purple-500/30">2</span>
                             <span>TLDs & Target Limits</span>
                         </div>
+                    </div>
+
+                    <!-- Character Limit Badge Banner -->
+                    <div class="flex items-center justify-between p-3.5 bg-indigo-950/40 border border-indigo-900/40 rounded-2xl">
+                        <div class="flex items-center gap-2.5">
+                            <i data-lucide="hash" class="w-4 h-4 text-indigo-400"></i>
+                            <span class="text-xs font-bold text-indigo-250">Premium Length Guard</span>
+                        </div>
+                        <span class="text-[9px] font-extrabold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-lg uppercase tracking-wider">
+                            8-12 Characters Only
+                        </span>
                     </div>
 
                     <!-- TLD Grid Selector -->
@@ -175,34 +193,34 @@
                         <div class="flex justify-between items-end">
                             <div class="space-y-0.5">
                                 <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Max Batch Pool</label>
-                                <p class="text-[10px] text-slate-500">Limits strictly checked available items</p>
+                                <p class="text-[10px] text-slate-550">Limits strictly checked available items</p>
                             </div>
                             <span class="text-xs font-extrabold text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20" id="maxCountDisplay">500</span>
                         </div>
-                        <input type="range" id="maxCountRange" min="50" max="500" step="50" value="500" class="w-full appearance-none bg-transparent">
+                        <input type="range" id="maxCountRange" min="50" max="500" step="50" value="500" class="w-full appearance-none bg-transparent py-2">
                     </div>
 
                     <!-- Beast Mode Toggle Overlay -->
-                    <div class="p-4 bg-slate-900/90 rounded-2xl border border-slate-700/60 space-y-3 shadow-inner">
+                    <div class="p-4 bg-slate-950/90 rounded-2xl border border-slate-850 space-y-3 shadow-inner">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <div class="w-7 h-7 rounded-lg bg-rose-500/10 flex items-center justify-center border border-rose-500/20">
-                                    <i data-lucide="flame" class="w-4 h-4 text-rose-400"></i>
+                                <div id="beastIconWrapper" class="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700">
+                                    <i data-lucide="flame" class="w-4 h-4 text-slate-400"></i>
                                 </div>
                                 <div class="text-left">
                                     <span class="text-xs font-extrabold text-white uppercase tracking-wider">Beast Mode Auto-Checkout</span>
-                                    <p class="text-[10px] text-slate-500">Multi-tab bulk cart automation</p>
+                                    <p class="text-[10px] text-slate-550">Multi-tab bulk cart automation</p>
                                 </div>
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="beastModeToggle" class="sr-only peer">
-                                <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-indigo-500 peer-checked:to-purple-600"></div>
+                                <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-rose-500 peer-checked:to-purple-600"></div>
                             </label>
                         </div>
                     </div>
 
                     <!-- Search Trigger -->
-                    <button id="searchBtn" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-500/20 hover:from-indigo-500 hover:to-purple-500 active:scale-[0.98] disabled:from-slate-800 disabled:to-slate-800 disabled:text-slate-600 disabled:shadow-none disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2.5 text-sm group">
+                    <button id="searchBtn" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-500/20 hover:from-indigo-500 hover:to-purple-500 active:scale-[0.98] disabled:from-slate-900 disabled:to-slate-900 disabled:text-slate-600 disabled:shadow-none disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2.5 text-sm group">
                         <i data-lucide="play" class="w-4 h-4 text-indigo-200 group-hover:translate-x-0.5 transition-transform"></i>
                         <span id="searchBtnText">Run 500 Batch Search</span>
                     </button>
@@ -211,10 +229,10 @@
 
             <!-- Table Results Screen (Right) -->
             <main class="lg:col-span-7 space-y-6">
-                <div class="bg-slate-800/50 backdrop-blur-md rounded-3xl border border-slate-700/60 overflow-hidden min-h-[580px] flex flex-col relative shadow-2xl">
+                <div class="bg-slate-900/50 backdrop-blur-md rounded-3xl border border-slate-800 overflow-hidden min-h-[580px] flex flex-col relative shadow-2xl">
                     
-                    <!-- Dynamic Summary Widget (Displays when results show) -->
-                    <div id="resultsSummaryWidget" class="hidden px-6 py-4 bg-slate-900/60 border-b border-slate-700/40 grid grid-cols-3 gap-4 text-xs font-semibold">
+                    <!-- Dynamic Summary Widget -->
+                    <div id="resultsSummaryWidget" class="hidden px-6 py-4 bg-slate-950/60 border-b border-slate-800 grid grid-cols-3 gap-4 text-xs font-semibold">
                         <div class="p-3 bg-indigo-500/5 border border-indigo-500/10 rounded-xl">
                             <span class="text-slate-500 block text-[9px] uppercase tracking-wider mb-0.5">Average Cost</span>
                             <span id="summaryAvgCost" class="text-sm font-bold text-indigo-400">$0.00</span>
@@ -229,21 +247,50 @@
                         </div>
                     </div>
 
-                    <!-- Header Actions -->
-                    <div id="resultsHeader" class="hidden px-6 py-4 bg-slate-900/30 border-b border-slate-700/40 flex flex-wrap justify-between items-center sticky top-0 z-10 shadow-lg backdrop-blur-md gap-4">
-                        <div class="flex items-center gap-3">
-                            <h3 class="font-bold text-sm text-white">Registry Verification Results</h3>
-                            <span id="matchCount" class="text-[9px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-md font-bold uppercase tracking-wider"></span>
+                    <!-- Header Actions & Interactive Filtering Toolbar -->
+                    <div id="resultsHeader" class="hidden px-6 py-4 bg-slate-950/30 border-b border-slate-800 flex flex-col gap-4 sticky top-0 z-10 shadow-lg backdrop-blur-md">
+                        <div class="flex flex-wrap justify-between items-center gap-4">
+                            <div class="flex items-center gap-3">
+                                <h3 class="font-bold text-sm text-white">Registry Verification Results</h3>
+                                <span id="matchCount" class="text-[9px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-md font-bold uppercase tracking-wider"></span>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button id="copyAllBtn" class="flex items-center gap-1.5 px-3 py-2 bg-slate-850 hover:bg-slate-800 text-slate-300 border border-slate-750 rounded-xl text-xs font-bold transition-all">
+                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                    Copy All
+                                </button>
+                                <button id="downloadCsvBtn" class="flex items-center gap-1.5 px-3 py-2 bg-slate-850 hover:bg-slate-800 text-slate-300 border border-slate-750 rounded-xl text-xs font-bold transition-all">
+                                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                    CSV
+                                </button>
+                                <button id="addAllToCartBtn" class="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-xs font-bold transition-all shadow-md">
+                                    <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
+                                    Bulk Checkout
+                                </button>
+                            </div>
                         </div>
-                        <div class="flex gap-2.5">
-                            <button id="downloadCsvBtn" class="flex items-center gap-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80 rounded-xl text-xs font-bold transition-all">
-                                <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                                CSV
-                            </button>
-                            <button id="addAllToCartBtn" class="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-xs font-bold transition-all shadow-md">
-                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
-                                Bulk Checkout
-                            </button>
+
+                        <!-- Interactive Filter & Sorting Sub-Bar -->
+                        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-1">
+                            <div class="sm:col-span-6 relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500">
+                                    <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                                </span>
+                                <input type="text" id="tableSearchInput" placeholder="Filter results..." 
+                                    class="w-full pl-9 pr-4 py-2 text-xs bg-slate-900 border border-slate-800 rounded-xl outline-none focus:border-indigo-500 text-slate-200 placeholder:text-slate-600 font-medium">
+                            </div>
+                            <div class="sm:col-span-3">
+                                <select id="filterTldSelect" class="w-full px-3 py-2 text-xs bg-slate-900 border border-slate-800 rounded-xl outline-none focus:border-indigo-500 text-slate-300 font-medium appearance-none cursor-pointer">
+                                    <option value="ALL">All Extensions</option>
+                                </select>
+                            </div>
+                            <div class="sm:col-span-3">
+                                <select id="sortResultsSelect" class="w-full px-3 py-2 text-xs bg-slate-900 border border-slate-800 rounded-xl outline-none focus:border-indigo-500 text-slate-300 font-medium appearance-none cursor-pointer">
+                                    <option value="price-asc">Price: Low to High</option>
+                                    <option value="price-desc">Price: High to Low</option>
+                                    <option value="alpha-asc">Name: A to Z</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -257,15 +304,15 @@
                     </div>
 
                     <!-- Empty State -->
-                    <div id="emptyState" class="flex flex-col items-center justify-center flex-grow text-slate-500 py-16 text-center px-10 space-y-6">
-                        <div class="w-20 h-20 bg-slate-800/80 rounded-2xl border border-slate-700 flex items-center justify-center relative">
+                    <div id="emptyState" class="flex flex-col items-center justify-center flex-grow text-slate-550 py-16 text-center px-10 space-y-6">
+                        <div class="w-20 h-20 bg-slate-900/80 rounded-2xl border border-slate-800 flex items-center justify-center relative">
                             <div class="absolute inset-0 bg-indigo-500/5 blur-xl rounded-2xl animate-pulse"></div>
                             <i data-lucide="cpu" class="w-10 h-10 text-indigo-500/40"></i>
                         </div>
                         <div class="max-w-sm space-y-2">
                             <h3 class="text-white font-bold text-base">Setup Your Search Seeds</h3>
                             <p class="text-xs text-slate-400 leading-relaxed">
-                                Type a keyword, auto-generate related marketing tags, select extensions, then run a high-intensity available portfolio verification.
+                                Type a keyword, auto-generate related marketing tags, select extensions, then run a high-intensity available portfolio verification. (Strictly 8–12 character brand lengths)
                             </p>
                         </div>
                     </div>
@@ -277,7 +324,7 @@
                             <div id="loaderRing" class="w-24 h-24 border-4 border-slate-800 border-t-indigo-500 rounded-full animate-spin"></div>
                             <div class="absolute inset-0 flex items-center justify-center flex-col">
                                 <span id="percentText" class="text-sm font-extrabold text-white font-mono">0%</span>
-                                <span class="text-[8px] text-slate-500 uppercase tracking-widest font-bold">Scanning</span>
+                                <span class="text-[8px] text-slate-550 uppercase tracking-widest font-bold">Scanning</span>
                             </div>
                         </div>
 
@@ -294,12 +341,12 @@
 
                         <!-- Progress Bar Tracker -->
                         <div class="w-full max-w-xs">
-                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mx-auto border border-slate-700">
-                                <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-purple-600 h-full transition-all duration-300" style="width: 0%"></div>
+                            <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden mx-auto border border-slate-800">
+                                <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-purple-600 h-full transition-all duration-305" style="width: 0%"></div>
                             </div>
                             <div class="flex justify-between items-center mt-2.5 px-1">
                                 <p class="text-[9px] text-slate-500 uppercase tracking-widest font-semibold" id="batchInfo">Initializing Matrix...</p>
-                                <span id="recheckBadge" class="hidden text-[9px] bg-rose-500/10 text-rose-400 border border-rose-500/20 px-1.5 py-0.5 rounded uppercase font-bold animate-pulse">Live Double Verification Active</span>
+                                <span id="recheckBadge" class="hidden text-[9px] bg-rose-550/10 text-rose-400 border border-rose-550/20 px-1.5 py-0.5 rounded uppercase font-bold animate-pulse">Live Double Verification Active</span>
                             </div>
                         </div>
                     </div>
@@ -308,14 +355,14 @@
                     <div id="resultsTableContainer" class="hidden overflow-y-auto flex-grow custom-scrollbar max-h-[600px]">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-slate-900/60 text-slate-400 sticky top-0 z-10 backdrop-blur-md">
-                                    <th class="px-6 py-4 text-[9px] font-extrabold uppercase tracking-widest border-b border-slate-700/50">Domain Asset</th>
-                                    <th class="px-6 py-4 text-[9px] font-extrabold uppercase tracking-widest border-b border-slate-700/50">Verification Status</th>
-                                    <th class="px-6 py-4 text-[9px] font-extrabold uppercase tracking-widest border-b border-slate-700/50 text-right">Price (USD)</th>
-                                    <th class="px-6 py-4 text-[9px] font-extrabold uppercase tracking-widest border-b border-slate-700/50 text-center">Registry Action</th>
+                                <tr class="bg-slate-950/60 text-slate-400 sticky top-0 z-10 backdrop-blur-md">
+                                    <th class="px-6 py-4 text-[9px] font-extrabold uppercase tracking-widest border-b border-slate-800">Domain Asset</th>
+                                    <th class="px-6 py-4 text-[9px] font-extrabold uppercase tracking-widest border-b border-slate-800">Verification Status</th>
+                                    <th class="px-6 py-4 text-[9px] font-extrabold uppercase tracking-widest border-b border-slate-800 text-right">Price (USD)</th>
+                                    <th class="px-6 py-4 text-[9px] font-extrabold uppercase tracking-widest border-b border-slate-800 text-center">Registry Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="resultsBody" class="divide-y divide-slate-800"></tbody>
+                            <tbody id="resultsBody" class="divide-y divide-slate-850"></tbody>
                         </table>
                     </div>
                 </div>
@@ -323,7 +370,7 @@
         </div>
 
         <!-- Technical Deep Dive Footer -->
-        <footer class="bg-slate-850 bg-gradient-to-b from-slate-900 to-slate-950 rounded-3xl p-8 text-slate-400 border border-slate-800 overflow-hidden relative">
+        <footer class="bg-slate-950 rounded-3xl p-8 text-slate-400 border border-slate-800 overflow-hidden relative">
             <div class="relative z-10 grid md:grid-cols-2 gap-12">
                 <div>
                     <h4 class="text-white font-bold mb-4 flex items-center gap-2 text-sm">
@@ -345,7 +392,7 @@
                     </div>
                 </div>
                 
-                <div class="bg-slate-900/60 rounded-2xl p-5 border border-slate-800 font-mono text-[11px] leading-relaxed relative overflow-hidden flex flex-col justify-between">
+                <div class="bg-slate-900/40 rounded-2xl p-5 border border-slate-800 font-mono text-[11px] leading-relaxed relative overflow-hidden flex flex-col justify-between">
                     <div class="space-y-1 text-slate-400">
                         <p class="text-indigo-400/80 font-bold">// Automated Dual-Verification Routine</p>
                         <p class="text-slate-500">async function verifyAvailability(pool) {</p>
@@ -355,8 +402,8 @@
                         <p class="text-slate-500">}</p>
                     </div>
                     
-                    <div class="mt-4 pt-4 border-t border-slate-800 flex justify-between items-center text-xs">
-                        <span class="text-slate-500 uppercase font-extrabold text-[9px] tracking-wider">Engine Throttle</span>
+                    <div class="mt-4 pt-4 border-t border-slate-850 flex justify-between items-center text-xs">
+                        <span class="text-slate-550 uppercase font-extrabold text-[9px] tracking-wider">Engine Throttle</span>
                         <span class="text-indigo-400 font-bold" id="footerTotal">500 Assets Max Cap</span>
                     </div>
                 </div>
@@ -368,7 +415,7 @@
 
     <script>
         const apiKey = ""; 
-
+        
         // Non-premium base wholesale pricing rates
         const EXTENSIONS = [
             { tld: '.xyz', base: 1.88, premiumChance: 0.15 }, 
@@ -414,6 +461,7 @@
             errorText: document.getElementById('errorText'),
             matchCount: document.getElementById('matchCount'),
             downloadBtn: document.getElementById('downloadCsvBtn'),
+            copyAllBtn: document.getElementById('copyAllBtn'),
             addAllToCartBtn: document.getElementById('addAllToCartBtn'),
             progressBar: document.getElementById('progressBar'),
             percentText: document.getElementById('percentText'),
@@ -423,23 +471,31 @@
             currentPhaseLabel: document.getElementById('currentPhaseLabel'),
             recheckBadge: document.getElementById('recheckBadge'),
             beastToggle: document.getElementById('beastModeToggle'),
+            beastBadge: document.getElementById('beastModeBadge'),
+            beastIconWrapper: document.getElementById('beastIconWrapper'),
             loaderRing: document.getElementById('loaderRing'),
             resultsSummaryWidget: document.getElementById('resultsSummaryWidget'),
             summaryAvgCost: document.getElementById('summaryAvgCost'),
-            summaryEstVal: document.getElementById('summaryEstVal')
+            summaryEstVal: document.getElementById('summaryEstVal'),
+            tableSearchInput: document.getElementById('tableSearchInput'),
+            filterTldSelect: document.getElementById('filterTldSelect'),
+            sortResultsSelect: document.getElementById('sortResultsSelect'),
+            mainBody: document.getElementById('mainBody'),
+            clipboardBuffer: document.getElementById('clipboardBuffer')
         };
 
         function init() {
             renderTLDs();
             lucide.createIcons();
             validateSearchBtnState();
+            setupFilterControls();
         }
 
         // Display Notification Toasts
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `flex items-center gap-2.5 px-4.5 py-3 rounded-2xl border text-xs font-bold shadow-2xl transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto`;
+            toast.className = `flex items-center gap-2.5 px-4 py-3 rounded-2xl border text-xs font-bold shadow-2xl transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto w-full`;
             
             if (type === 'success') {
                 toast.className += ' bg-emerald-500/10 border-emerald-500/20 text-emerald-400';
@@ -448,7 +504,7 @@
                 toast.className += ' bg-rose-500/10 border-rose-500/20 text-rose-400';
                 toast.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 text-rose-400"></i> <span>${message}</span>`;
             } else {
-                toast.className += ' bg-slate-800 border-slate-700 text-slate-300';
+                toast.className += ' bg-slate-900/90 border-slate-800 text-slate-300';
                 toast.innerHTML = `<i data-lucide="info" class="w-4 h-4 text-indigo-400"></i> <span>${message}</span>`;
             }
 
@@ -475,7 +531,7 @@
                     class="px-2 py-2 text-[10px] font-bold rounded-xl border transition-all flex justify-between items-center ${
                         selectedTLDs.includes(ext.tld)
                             ? 'bg-indigo-600 border-indigo-600 text-white shadow-md'
-                            : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
+                            : 'bg-slate-950 border-slate-850 text-slate-400 hover:border-slate-800'
                     }">
                     <span>${ext.tld}</span>
                     <span class="opacity-70 ${selectedTLDs.includes(ext.tld) ? 'text-indigo-100' : 'text-slate-500'}">
@@ -516,9 +572,27 @@
             isBeastMode = e.target.checked;
             if (isBeastMode) {
                 els.searchBtn.classList.add('beast-glow');
-                showToast("Beast Mode Active: Will auto-open checkout tabs upon verification!", "success");
+                els.mainBody.classList.add('beast-active-bg');
+                
+                // Beast badge UI shift
+                els.beastBadge.textContent = "BEAST MODE 100%";
+                els.beastBadge.className = "text-[10px] tracking-widest uppercase font-bold bg-gradient-to-r from-rose-500 to-indigo-500 text-white px-2.5 py-1 rounded-full shadow-lg border border-rose-450/20 transition-all duration-500";
+                
+                els.beastIconWrapper.className = "w-7 h-7 rounded-lg bg-rose-500/10 flex items-center justify-center border border-rose-500/20";
+                els.beastIconWrapper.querySelector('i').className = "w-4 h-4 text-rose-400";
+                
+                showToast("Beast Mode Active: Live multi-tab automation primed!", "success");
             } else {
                 els.searchBtn.classList.remove('beast-glow');
+                els.mainBody.classList.remove('beast-active-bg');
+                
+                // Standard offline speed UI shift
+                els.beastBadge.textContent = "OFFLINE SPEED";
+                els.beastBadge.className = "text-[10px] tracking-widest uppercase font-bold bg-slate-850 text-slate-400 px-2.5 py-1 rounded-full shadow-lg border border-slate-800 transition-all duration-500";
+                
+                els.beastIconWrapper.className = "w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700";
+                els.beastIconWrapper.querySelector('i').className = "w-4 h-4 text-slate-400";
+                
                 showToast("Beast Mode deactivated.", "info");
             }
         });
@@ -627,6 +701,88 @@
 
         els.aiGenerateBtn.addEventListener('click', runBrainstorm);
 
+        // Populate TLD selector options dynamically in filtration bar
+        function setupFilterControls() {
+            els.filterTldSelect.innerHTML = `<option value="ALL">All Extensions</option>` + EXTENSIONS.map(ext => `
+                <option value="${ext.tld}">${ext.tld}</option>
+            `).join('');
+
+            // Set up UI Event listeners for Live Filters
+            els.tableSearchInput.addEventListener('input', performLiveRendering);
+            els.filterTldSelect.addEventListener('change', performLiveRendering);
+            els.sortResultsSelect.addEventListener('change', performLiveRendering);
+        }
+
+        // Filter and Sort active results
+        function getFilteredResults() {
+            let results = [...activeResults];
+            const searchVal = els.tableSearchInput.value.toLowerCase().trim();
+            const tldVal = els.filterTldSelect.value;
+            const sortVal = els.sortResultsSelect.value;
+
+            // Apply Text Search Filter
+            if (searchVal) {
+                results = results.filter(item => item.domain.includes(searchVal));
+            }
+
+            // Apply TLD Extension Filter
+            if (tldVal !== 'ALL') {
+                results = results.filter(item => item.domain.endsWith(tldVal));
+            }
+
+            // Apply Sorting Algorithm
+            if (sortVal === 'price-asc') {
+                results.sort((a, b) => a.price - b.price);
+            } else if (sortVal === 'price-desc') {
+                results.sort((a, b) => b.price - a.price);
+            } else if (sortVal === 'alpha-asc') {
+                results.sort((a, b) => a.domain.localeCompare(b.domain));
+            }
+
+            return results;
+        }
+
+        // Render filtered table list
+        function performLiveRendering() {
+            const renderList = getFilteredResults();
+            els.matchCount.textContent = `${renderList.length} Verified Available (No Premium markup)`;
+            
+            if (renderList.length === 0) {
+                els.resultsBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="px-6 py-12 text-center text-slate-500 font-medium text-xs">
+                            <i data-lucide="search-code" class="w-8 h-8 mx-auto text-slate-650 mb-2.5 opacity-50"></i>
+                            No available domains match your filters.
+                        </td>
+                    </tr>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            els.resultsBody.innerHTML = renderList.map(res => `
+                <tr class="hover:bg-slate-900/40 transition-all border-b border-slate-850/80 last:border-0">
+                    <td class="px-6 py-3 font-bold text-slate-100 text-xs">${res.domain}</td>
+                    <td class="px-6 py-3">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Checked & Free
+                        </span>
+                    </td>
+                    <td class="px-6 py-3 text-right font-mono text-xs">
+                        <span class="text-indigo-400 font-extrabold">$${res.price.toFixed(2)}</span>
+                    </td>
+                    <td class="px-6 py-3 text-center">
+                        <a href="[https://www.namecheap.com/domains/registration/results/?domain=$](https://www.namecheap.com/domains/registration/results/?domain=$){res.domain}" target="_blank"
+                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-600/20 border border-indigo-500/30 hover:bg-indigo-600 text-indigo-300 hover:text-white rounded-xl text-xs font-bold shadow-sm transition-all">
+                            Buy <i data-lucide="shopping-cart" class="w-3 h-3"></i>
+                        </a>
+                    </td>
+                </tr>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
         // Core Search & Double Verification Logic
         async function runSearch() {
             const seed = els.keywordInput.value.trim();
@@ -644,24 +800,51 @@
             els.progressBar.style.width = '5%';
             els.percentText.textContent = '5%';
 
+            // Clear filter fields to avoid showing dead arrays on new load
+            els.tableSearchInput.value = '';
+            els.filterTldSelect.value = 'ALL';
+
             // Ensure we have some keywords. If user hasn't run the generator, auto-fill standard ones
             let currentSeeds = [...brainstormedKeywords];
             if (currentSeeds.length === 0) {
                 currentSeeds = [seed.toLowerCase().replace(/[^a-z0-9]/g, '')];
             }
 
+            // Smart Root Extraction: If entered or generated seeds are too long to comfortably 
+            // construct 8-12 character domains, extract premium segment fragments automatically.
+            let coreSeeds = [];
+            currentSeeds.forEach(item => {
+                const clean = item.toLowerCase().replace(/[^a-z0-9]/g, '');
+                if (clean.length > 0) {
+                    coreSeeds.push(clean);
+                }
+                
+                // If base is long, extract brandable root subwords to make sure we hit the 8-12 character limit beautifully
+                if (clean.length > 6) {
+                    coreSeeds.push(clean.substring(0, 5));
+                    coreSeeds.push(clean.substring(clean.length - 5));
+                    if (clean.length > 10) {
+                        coreSeeds.push(clean.substring(0, 7));
+                    }
+                }
+            });
+            coreSeeds = [...new Set(coreSeeds)].filter(s => s.length > 0);
+
             try {
                 // Compile variations pool
                 const rawPermutations = [];
-                currentSeeds.forEach(item => {
+                coreSeeds.forEach(item => {
                     PREFIXES.forEach(pref => {
                         SUFFIXES.forEach(suff => {
-                            selectedTLDs.forEach(tld => {
-                                const domainStr = `${pref}${item}${suff}${tld}`.toLowerCase();
-                                if (domainStr.length <= 30) {
+                            const label = `${pref}${item}${suff}`.toLowerCase();
+                            
+                            // CHARACTER LIMITATION: strictly 8 to 12 characters (inclusive)
+                            if (label.length >= 8 && label.length <= 12) {
+                                selectedTLDs.forEach(tld => {
+                                    const domainStr = `${label}${tld}`;
                                     rawPermutations.push(domainStr);
-                                }
-                            });
+                                });
+                            }
                         });
                     });
                 });
@@ -743,7 +926,7 @@
                     els.summaryEstVal.textContent = `$${estValue.toFixed(0)}`;
                 }
 
-                renderResults();
+                performLiveRendering();
                 setUIState('results');
                 showToast(`Double verified ${activeResults.length} domains. Zero premium markups found!`, "success");
 
@@ -758,32 +941,6 @@
                 setUIState('error', "Dual Verification API Pipeline timed out. Please check your network and try again.");
                 showToast("Search failed.", "error");
             }
-        }
-
-        function renderResults() {
-            els.matchCount.textContent = `${activeResults.length} Verified Available (No Premium markup)`;
-            
-            els.resultsBody.innerHTML = activeResults.map(res => `
-                <tr class="hover:bg-slate-900/40 transition-all border-b border-slate-800/80 last:border-0">
-                    <td class="px-6 py-3 font-bold text-slate-100 text-xs">${res.domain}</td>
-                    <td class="px-6 py-3">
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
-                            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Checked & Free
-                        </span>
-                    </td>
-                    <td class="px-6 py-3 text-right font-mono text-xs">
-                        <span class="text-indigo-400 font-extrabold">$${res.price.toFixed(2)}</span>
-                    </td>
-                    <td class="px-6 py-3 text-center">
-                        <a href="[https://www.namecheap.com/domains/registration/results/?domain=$](https://www.namecheap.com/domains/registration/results/?domain=$){res.domain}" target="_blank"
-                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-600/20 border border-indigo-500/30 hover:bg-indigo-600 text-indigo-300 hover:text-white rounded-xl text-xs font-bold shadow-sm transition-all">
-                            Buy <i data-lucide="shopping-cart" class="w-3 h-3"></i>
-                        </a>
-                    </td>
-                </tr>
-            `).join('');
-            
-            lucide.createIcons();
         }
 
         function setUIState(state, msg = '') {
@@ -824,13 +981,14 @@
 
         // Chunked Bulk Add to Cart Routine (Avoids browser crashing from hundreds of tabs)
         function handleBulkAddToCart() {
-            const domains = activeResults.map(r => r.domain);
+            const currentFiltered = getFilteredResults();
+            const domains = currentFiltered.map(r => r.domain);
             if (domains.length === 0) {
-                showToast("No verified domains to checkout.", "error");
+                showToast("No verified domains to checkout based on current filters.", "error");
                 return;
             }
             
-            // We chunk domain checkouts in batches of 50 in Namecheap to prevent URL limits
+            // Chunk domain checkouts in batches of 50 in Namecheap to prevent URL length limits
             const chunks = [];
             for (let i = 0; i < domains.length; i += 50) {
                 chunks.push(domains.slice(i, i + 50));
@@ -847,14 +1005,40 @@
 
         els.addAllToCartBtn.addEventListener('click', handleBulkAddToCart);
 
+        // Clipboard Copy Command (Supports Sandbox IFrames smoothly via textarea buffer fallback)
+        els.copyAllBtn.addEventListener('click', () => {
+            const currentFiltered = getFilteredResults();
+            if (currentFiltered.length === 0) {
+                showToast("No active results available to copy.", "error");
+                return;
+            }
+
+            const domainsText = currentFiltered.map(r => r.domain).join('\n');
+            els.clipboardBuffer.value = domainsText;
+            els.clipboardBuffer.select();
+            els.clipboardBuffer.setSelectionRange(0, 99999); // Safe selector for mobile layout support
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast(`${currentFiltered.length} domains copied to clipboard!`, "success");
+                } else {
+                    throw new Error("Copy utility disabled or unsupportive.");
+                }
+            } catch (err) {
+                showToast("Clipboard copy failed due to browser restrictions.", "error");
+            }
+        });
+
         // CSV Export Option
         els.downloadBtn.addEventListener('click', () => {
-            if (activeResults.length === 0) {
+            const currentFiltered = getFilteredResults();
+            if (currentFiltered.length === 0) {
                 showToast("No active results to export.", "error");
                 return;
             }
 
-            const csvContent = [['Domain Asset', 'Status', 'Wholesale Price (USD)'], ...activeResults.map(r => [r.domain, 'Available', r.price])]
+            const csvContent = [['Domain Asset', 'Status', 'Wholesale Price (USD)'], ...currentFiltered.map(r => [r.domain, 'Available', r.price])]
                 .map(row => row.map(cell => `"${cell}"`).join(','))
                 .join('\n');
 
